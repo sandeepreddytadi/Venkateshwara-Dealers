@@ -36,7 +36,7 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
 
     /* Header */
-    .topbar { background: #083b26; color: #d1fae5; font-size: .9rem; }
+    .topbar { background: #c40000; color: #d1fae5; font-size: .9rem; }
     .topbar .container { display: flex; align-items: center; justify-content: space-between; padding: .4rem 1rem; }
 
     header.nav {
@@ -53,6 +53,88 @@
     .btn { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid rgba(2,6,23,.08); padding: .6rem .9rem; border-radius: .8rem; background: #fff; box-shadow: var(--shadow); font-weight: 600; }
     .btn.primary { background: var(--brand); color: #fff; border-color: transparent; }
     .btn.primary:hover { background: var(--brand-600); }
+    
+    /* Hamburger Menu */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      position: relative;
+      z-index: 30;
+    }
+    .menu-toggle .hamburger-icon,
+    .menu-toggle .hamburger-icon::before,
+    .menu-toggle .hamburger-icon::after {
+      content: '';
+      display: block;
+      height: 2px;
+      width: 100%;
+      background-color: var(--ink);
+      position: absolute;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      border-radius: 2px;
+    }
+    .menu-toggle .hamburger-icon {
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+    .menu-toggle .hamburger-icon::before {
+      top: -8px;
+    }
+    .menu-toggle .hamburger-icon::after {
+      top: 8px;
+    }
+
+    .nav-inner.active .menu-toggle .hamburger-icon {
+      transform: rotate(45deg);
+    }
+    .nav-inner.active .menu-toggle .hamburger-icon::before {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    .nav-inner.active .menu-toggle .hamburger-icon::after {
+      transform: rotate(-90deg) translateY(-8px);
+    }
+
+    /* Mobile Menu */
+    .mobile-nav-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(250,250,250,.95);
+      backdrop-filter: blur(8px);
+      z-index: 25;
+      padding-top: 80px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+      transform: translateX(100%);
+    }
+    .nav-inner.active .mobile-nav-menu {
+      display: flex;
+      transform: translateX(0);
+    }
+
+    .mobile-nav-menu ul {
+      flex-direction: column;
+      gap: 2rem;
+      width: 100%;
+      text-align: center;
+    }
+    .mobile-nav-menu li a {
+      font-size: 1.5rem;
+      font-weight: 600;
+      padding: 0.5rem 0;
+    }
 
     /* Hero */
     .hero { position: relative; }
@@ -73,15 +155,48 @@
     .muted { color: var(--muted); }
 
     /* Products grid */
-    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
-    .card { grid-column: span 4; background: var(--card); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; border: 1px solid rgba(2,6,23,.06); display: flex; flex-direction: column; }
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(12, 1fr); 
+      gap: 1rem; 
+      align-items: stretch; 
+    }
+    .card { 
+      grid-column: span 4; 
+      background: var(--card); 
+      border-radius: 18px; 
+      box-shadow: var(--shadow); 
+      overflow: hidden; 
+      border: 1px solid rgba(2,6,23,.06); 
+      display: flex; 
+      flex-direction: column; 
+    }
     .card img { width: 100%; height: 180px; object-fit: cover; }
-    .card .body { padding: 1rem; display: flex; flex-direction: column; gap: .5rem; }
+    .card .body { 
+      padding: 1rem; 
+      display: flex; 
+      flex-direction: column; 
+      gap: .5rem; 
+      flex-grow: 1; 
+    }
     .chip { display: inline-flex; align-items: center; gap: .4rem; font-size: .8rem; background: #ecfdf5; color: #065f46; border: 1px solid #bbf7d0; padding: .2rem .5rem; border-radius: 999px; }
 
     /* Recommendation tool */
-    .tool { display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.2rem; }
-    .panel { background: #fff; border: 1px solid rgba(2,6,23,.06); border-radius: 18px; padding: 1rem; box-shadow: var(--shadow); }
+    .tool { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 1.2rem; 
+      align-items: stretch; 
+    }
+    .panel { 
+      background: #fff; 
+      border: 1px solid rgba(2,6,23,.06); 
+      border-radius: 18px; 
+      padding: 1rem; 
+      box-shadow: var(--shadow); 
+      display: flex; 
+      flex-direction: column;
+    }
     .panel h3 { margin: .2rem 0 1rem; }
     .field { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-bottom: .8rem; }
     .field label { font-size: .9rem; color: var(--muted); }
@@ -89,9 +204,9 @@
     .field input:focus, .field select:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--ring); }
     .row { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; }
     .help { font-size: .85rem; color: var(--muted); }
-    .result-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .8rem; }
+    .result-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .8rem; flex-grow: 1; }
     .result { border: 1px solid rgba(2,6,23,.08); border-radius: 16px; padding: .8rem; display: grid; grid-template-columns: 1fr auto; gap: .4rem; align-items: center; }
-    .result .specs { font-size: .9rem; color: var(--muted); }
+    #summary { flex-grow: 1; }
 
     /* Banner */
     .band { background: linear-gradient(90deg, var(--brand), #22c55e); color: #052e1d; border-radius: 16px; padding: 1rem; display: grid; grid-template-columns: 1fr auto; align-items: center; }
@@ -108,63 +223,116 @@
     .floating .fab { background: var(--brand); color: #fff; padding: .8rem 1rem; border-radius: 999px; box-shadow: var(--shadow); border: none; font-weight: 700; }
     .floating .fab:hover { background: var(--brand-600); }
 
+    /* Responsive adjustments for Contact section */
+    .contact-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr; 
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+    .contact-panel {
+      background: #fff;
+      border: 1px solid rgba(2, 6, 23, 0.06);
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    .map-container {
+      flex-grow: 1;
+      height: 100%;
+      min-height: 250px;
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+    }
+
     /* Responsive */
     @media (max-width: 980px) {
       .hero-inner { grid-template-columns: 1fr; }
-      .tool { grid-template-columns: 1fr; }
+      .tool { grid-template-columns: 1fr; } 
       .result-list { grid-template-columns: 1fr; }
       footer .container { grid-template-columns: 1fr 1fr; }
       .card { grid-column: span 6; }
+      .contact-panels { grid-template-columns: 1fr; }
+      
+      /* Mobile nav */
+      nav ul { display: none; }
+      .menu-toggle { display: block; }
     }
     @media (max-width: 640px) {
-      nav ul { display: none; }
       .metrics { grid-template-columns: 1fr; }
       .grid { grid-template-columns: repeat(6, 1fr); }
       .card { grid-column: span 6; }
       footer .container { grid-template-columns: 1fr; }
+      .contact-panels { grid-template-columns: 1fr; } 
     }
   </style>
 </head>
 <body>
   <div class="topbar">
     <div class="container">
-      <div>🇮🇳 Trusted by Godavari farmers</div>
-      <div></div>
+      <div data-i18n="topbar_text">🇮🇳 Trusted by Godavari farmers Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)</div>
     </div>
   </div>
 
   <header class="nav">
-    <div class="container nav-inner">
+    <div class="container nav-inner" id="nav-container">
       <div class="brand">
         <div class="logo" aria-hidden="true">🌿</div>
-        <span>Venkateshwara Dealers</span>
+        <span data-i18n="brand_name">Venkateshwara Dealers</span>
       </div>
       <nav>
         <ul>
-          <li><a href="#products">Products</a></li>
-          <li><a href="#tool">Pump Finder</a></li>
-          <li><a href="#contact" class="btn">Contact</a></li>
+          <li><a href="#products" data-i18n="nav_products">Products</a></li>
+          <li><a href="#tool" data-i18n="nav_finder">Pump Finder</a></li>
+          <li><a href="#contact" class="btn" data-i18n="nav_contact">Contact</a></li>
+          <li>
+            <select id="language-switcher">
+              <option value="en">English</option>
+              <option value="te">తెలుగు</option>
+            </select>
+          </li>
         </ul>
       </nav>
+      <button class="menu-toggle" aria-label="Toggle navigation menu">
+        <span class="hamburger-icon"></span>
+      </button>
+      <div class="mobile-nav-menu">
+        <ul>
+          <li><a href="#products" data-i18n="nav_products">Products</a></li>
+          <li><a href="#tool" data-i18n="nav_finder">Pump Finder</a></li>
+          <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+          <li>
+            <select id="mobile-language-switcher">
+              <option value="en">English</option>
+              <option value="te">తెలుగు</option>
+            </select>
+          </li>
+        </ul>
+      </div>
     </div>
   </header>
 
   <section class="hero">
     <div class="container hero-inner">
       <div>
-        <div class="chip">Energy-efficient • ISI certified</div>
-        <h1>Reliable pumps for Indian farms.</h1>
-        <p>From borewell submersibles to high-head centrifugal pumps, we build irrigation solutions that save power, deliver consistent discharge, and last through tough seasons.</p>
+        <div class="chip" data-i18n="hero_chip">Energy-efficient • ISI certified</div>
+        <h1 data-i18n="hero_title">Reliable pumps for Indian farms.</h1>
+        <p data-i18n="hero_para">From borewell submersibles to high-head centrifugal pumps, we build irrigation solutions that save power, deliver consistent discharge, and last through tough seasons.</p>
         <div class="metrics">
-          <div class="metric"><strong>25–280 m</strong><span class="muted">Head range</span></div>
-          <div class="metric"><strong>20–600 LPM</strong><span class="muted">Discharge</span></div>
-          <div class="metric"><strong>0.5–15 HP</strong><span class="muted">Power options</span></div>
+          <div class="metric"><strong>25–280 m</strong><span class="muted" data-i18n="hero_metric1">Head range</span></div>
+          <div class="metric"><strong>20–600 LPM</strong><span class="muted" data-i18n="hero_metric2">Discharge</span></div>
+          <div class="metric"><strong>0.5–15 HP</strong><span class="muted" data-i18n="hero_metric3">Power options</span></div>
         </div>
       </div>
       <div class="hero-art">
         <div class="art-card">
           <div class="art-img" role="img" aria-label="A farmer irrigating crop with pump"></div>
-          <p class="help">Proven in paddy, sugarcane, horticulture & more.</p>
+          <p class="help" data-i18n="hero_help">Proven in paddy, sugarcane, horticulture & more.</p>
         </div>
       </div>
     </div>
@@ -173,40 +341,40 @@
   <section id="products">
     <div class="container">
       <div class="section-head">
-        <h2>Popular Pump Lines</h2>
-        <p class="muted">Built for borewells, open wells, and surface sources.</p>
+        <h2 data-i18n="prod_heading">Popular Pump Lines</h2>
+        <p class="muted" data-i18n="prod_para">Built for borewells, open wells, and surface sources.</p>
       </div>
       <div class="grid">
         <div class="card">
           <img alt="4-inch submersible pump" src="https://images.unsplash.com/photo-1568607689150-17e625c1586c?q=80&w=1600&auto=format&fit=crop" />
           <div class="body">
-            <div class="chip">Borewell</div>
-            <h3>4" Submersible</h3>
-            <p class="muted">Deep borewell use, high efficiency with stainless steel stages.</p>
+            <div class="chip" data-i18n="prod_chip1">Borewell</div>
+            <h3 data-i18n="prod_title1">4" Submersible</h3>
+            <p class="muted" data-i18n="prod_desc1">Deep borewell use, high efficiency with stainless steel stages.</p>
             <div>
-              <a class="btn" href="#tool">See if it fits →</a>
+              <a class="btn" href="#tool" data-i18n="prod_btn1">See if it fits →</a>
             </div>
           </div>
         </div>
         <div class="card">
           <img alt="Centrifugal pump" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1600&auto=format&fit=crop" />
           <div class="body">
-            <div class="chip">Open Well / Surface</div>
-            <h3>High-Head Centrifugal</h3>
-            <p class="muted">Ideal for sprinklers & undulating farms with moderate head.</p>
+            <div class="chip" data-i18n="prod_chip2">Open Well / Surface</div>
+            <h3 data-i18n="prod_title2">High-Head Centrifugal</h3>
+            <p class="muted" data-i18n="prod_desc2">Ideal for sprinklers & undulating farms with moderate head.</p>
             <div>
-              <a class="btn" href="#tool">Check compatibility →</a>
+              <a class="btn" href="#tool" data-i18n="prod_btn2">Check compatibility →</a>
             </div>
           </div>
         </div>
         <div class="card">
           <img alt="Monoblock pump" src="https://images.unsplash.com/photo-1530977875151-aae9742c473b?q=80&w=1600&auto=format&fit=crop" />
           <div class="body">
-            <div class="chip">Surface</div>
-            <h3>Monoblock</h3>
-            <p class="muted">Affordable workhorse for small farms and drip lines.</p>
+            <div class="chip" data-i18n="prod_chip3">Surface</div>
+            <h3 data-i18n="prod_title3">Monoblock</h3>
+            <p class="muted" data-i18n="prod_desc3">Affordable workhorse for small farms and drip lines.</p>
             <div>
-              <a class="btn" href="#tool">Compare →</a>
+              <a class="btn" href="#tool" data-i18n="prod_btn3">Compare →</a>
             </div>
           </div>
         </div>
@@ -217,105 +385,105 @@
   <section id="tool">
     <div class="container">
       <div class="section-head">
-        <h2>Pump Recommendation Tool</h2>
-        <p class="muted">Answer a few questions and get tailored pump suggestions.</p>
+        <h2 data-i18n="tool_heading">Pump Recommendation Tool</h2>
+        <p class="muted" data-i18n="tool_para">Answer a few questions and get tailored pump suggestions.</p>
       </div>
 
       <div class="tool">
         <div class="panel" aria-labelledby="finder-heading">
-          <h3 id="finder-heading">Your Farm Details</h3>
+          <h3 id="finder-heading" data-i18n="finder_heading">Your Farm Details</h3>
 
           <div class="field">
             <div>
-              <label for="crop">Primary crop</label>
+              <label for="crop" data-i18n="label_crop">Primary crop</label>
               <select id="crop">
-                <option>Rice / Paddy</option>
-                <option>Wheat</option>
-                <option>Sugarcane</option>
-                <option>Vegetables</option>
-                <option>Orchard / Horticulture</option>
-                <option>Other / Mixed</option>
+                <option data-i18n="option_crop1">Rice / Paddy</option>
+                <option data-i18n="option_crop2">Wheat</option>
+                <option data-i18n="option_crop3">Sugarcane</option>
+                <option data-i18n="option_crop4">Vegetables</option>
+                <option data-i18n="option_crop5">Orchard / Horticulture</option>
+                <option data-i18n="option_crop6">Other / Mixed</option>
               </select>
             </div>
             <div>
-              <label for="area">Farm area (acres)</label>
-              <input id="area" type="number" min="0.1" step="0.1" placeholder="e.g., 3" />
+              <label for="area" data-i18n="label_area">Farm area (acres)</label>
+              <input id="area" type="number" min="0.1" step="0.1" data-i18n-placeholder="ph_area" placeholder="e.g., 3" />
             </div>
           </div>
 
           <div class="field">
             <div>
-              <label for="source">Water source</label>
+              <label for="source" data-i18n="label_source">Water source</label>
               <select id="source">
-                <option>Open Well / Tank</option>
-                <option>Borewell</option>
-                <option>Canal / River</option>
+                <option data-i18n="option_source1">Open Well / Tank</option>
+                <option data-i18n="option_source2">Borewell</option>
+                <option data-i18n="option_source3">Canal / River</option>
               </select>
             </div>
             <div>
-              <label for="depth">Static water level (m)</label>
-              <input id="depth" type="number" min="0" step="1" placeholder="e.g., 45" />
+              <label for="depth" data-i18n="label_depth">Static water level (m)</label>
+              <input id="depth" type="number" min="0" step="1" data-i18n-placeholder="ph_depth" placeholder="e.g., 45" />
             </div>
           </div>
 
           <div class="field">
             <div>
-              <label for="head">Total head required (m)</label>
-              <input id="head" type="number" min="5" step="1" placeholder="e.g., 60" />
+              <label for="head" data-i18n="label_head">Total head required (m)</label>
+              <input id="head" type="number" min="5" step="1" data-i18n-placeholder="ph_head" placeholder="e.g., 60" />
             </div>
             <div>
-              <label for="flow">Desired discharge (LPM)</label>
-              <input id="flow" type="number" min="10" step="5" placeholder="e.g., 120" />
+              <label for="flow" data-i18n="label_flow">Desired discharge (LPM)</label>
+              <input id="flow" type="number" min="10" step="5" data-i18n-placeholder="ph_flow" placeholder="e.g., 120" />
             </div>
           </div>
 
           <div class="field">
             <div>
-              <label for="method">Irrigation method</label>
+              <label for="method" data-i18n="label_method">Irrigation method</label>
               <select id="method">
-                <option>Flood</option>
-                <option>Sprinkler</option>
-                <option>Drip</option>
+                <option data-i18n="option_method1">Flood</option>
+                <option data-i18n="option_method2">Sprinkler</option>
+                <option data-i18n="option_method3">Drip</option>
               </select>
             </div>
             <div>
-              <label for="phase">Power supply</label>
+              <label for="phase" data-i18n="label_phase">Power supply</label>
               <select id="phase">
-                <option>Single-phase (220V)</option>
-                <option>Three-phase (415V)</option>
+                <option data-i18n="option_phase1">Single-phase (220V)</option>
+                <option data-i18n="option_phase2">Three-phase (415V)</option>
               </select>
             </div>
           </div>
 
           <div class="field">
             <div>
-              <label for="budget">Budget</label>
+              <label for="budget" data-i18n="label_budget">Budget</label>
               <select id="budget">
-                <option>Economy</option>
-                <option>Mid</option>
-                <option>Premium</option>
+                <option data-i18n="option_budget1">Economy</option>
+                <option data-i18n="option_budget2">Mid</option>
+                <option data-i18n="option_budget3">Premium</option>
               </select>
             </div>
-            <div class="help">Tip: Head is the vertical lift + friction losses. If unsure, add 20% safety.</div>
+            <div class="help" data-i18n="tool_help">Tip: Head is the vertical lift + friction losses. If unsure, add 20% safety.</div>
           </div>
 
           <div class="row">
-            <button class="btn primary" id="recommendBtn">Get Recommendations</button>
-            <button class="btn" id="resetBtn">Reset</button>
+            <button class="btn primary" id="recommendBtn" data-i18n="btn_recommend">Get Recommendations</button>
+            <button class="btn" id="resetBtn" data-i18n="btn_reset">Reset</button>
           </div>
         </div>
 
         <div class="panel" aria-live="polite">
-          <h3>Suggested Pumps</h3>
-          <div id="summary" class="help">Fill the form and click <strong>Get Recommendations</strong>.</div>
+          <h3 data-i18n="suggested_heading">Suggested Pumps</h3>
+          <div id="summary" class="help" data-i18n="summary_initial">Fill the form and click <strong>Get Recommendations</strong>.</div>
           <div class="result-list" id="results"></div>
 
           <div class="band" style="margin-top: .8rem;">
             <div>
-              <strong>Need help sizing pipe & cables?</strong>
-              <span class="muted">Our engineers can share a full BOQ with losses and efficiency estimates.</span>
+              <strong data-i18n="band_strong">Need help sizing pipe & cables?</strong>
+              <span class="muted" data-i18n="band_span">Our engineers can share a full BOQ with losses and efficiency estimates.</span>
             </div>
-            <a class="btn" href="#contact">Talk to an expert</a>
+            <a class="btn" href="#contact" data-i18n="band_btn">Talk to an expert</a>
           </div>
         </div>
       </div>
@@ -325,32 +493,32 @@
   <section id="about">
     <div class="container">
       <div class="section-head">
-        <h2>Why farmers choose Venkateshwara Dealers</h2>
-        <p class="muted">We combine efficiency, durability, and fast service.</p>
+        <h2 data-i18n="about_heading">Why farmers choose Venkateshwara Dealers</h2>
+        <p class="muted" data-i18n="about_para">We combine efficiency, durability, and fast service.</p>
       </div>
       <div class="grid">
         <div class="card" style="grid-column: span 6;">
           <div class="body">
-            <h3>Energy-efficient by design</h3>
-            <p class="muted">ISI-marked motors, copper windings, and optimized hydraulic designs save 10–18% power vs. market average.</p>
+            <h3 data-i18n="about_title1">Energy-efficient by design</h3>
+            <p class="muted" data-i18n="about_desc1">ISI-marked motors, copper windings, and optimized hydraulic designs save 10–18% power vs. market average.</p>
           </div>
         </div>
         <div class="card" style="grid-column: span 6;">
           <div class="body">
-            <h3>Rugged for Indian conditions</h3>
-            <p class="muted">Sand-tolerant stages and robust bearings ensure long life even in challenging water quality.</p>
+            <h3 data-i18n="about_title2">Rugged for Indian conditions</h3>
+            <p class="muted" data-i18n="about_desc2">Sand-tolerant stages and robust bearings ensure long life even in challenging water quality.</p>
           </div>
         </div>
         <div class="card" style="grid-column: span 6;">
           <div class="body">
-            <h3>Fast parts & service</h3>
-            <p class="muted">Nationwide dealer network with 48–72 hr turnaround on most spares.</p>
+            <h3 data-i18n="about_title3">Fast parts & service</h3>
+            <p class="muted" data-i18n="about_desc3">Nationwide dealer network with 48–72 hr turnaround on most spares.</p>
           </div>
         </div>
         <div class="card" style="grid-column: span 6;">
           <div class="body">
-            <h3>Solar-ready options</h3>
-            <p class="muted">Compatible VFD and MPPT controllers available for off-grid irrigation.</p>
+            <h3 data-i18n="about_title4">Solar-ready options</h3>
+            <p class="muted" data-i18n="about_desc4">Compatible VFD and MPPT controllers available for off-grid irrigation.</p>
           </div>
         </div>
       </div>
@@ -360,18 +528,18 @@
   <section id="contact">
     <div class="container">
       <div class="section-head">
-        <h2>Contact & Enquiries</h2>
+        <h2 data-i18n="contact_heading">Contact & Enquiries</h2>
       </div>
-      <div class="tool">
-        <div class="panel">
-            <h3>Address</h3>
+      <div class="contact-panels">
+        <div class="contact-panel">
+          <h3 data-i18n="address_heading">Address</h3>
           <Address>
             Opp. C.W.C Godowns,<br/> Near Sri Chaitanya Techno School,<br/> Nallajarla Road, K.N.Road,<br/> Tadepalligudem, West Godavari,<br/> Andhra Pradesh 534101
           </Address>
-          <p>📞 1800-000-1234<br/>✉️ hello@Venkateshwara Dealers.example</p>
+          <p>📞 +91 89853 14256, +91 94949 09126<br/>✉️ hello@Venkateshwara Dealers.example</p>
         </div>
-        <div class="panel">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30553.145216376906!2d81.49535691608094!3d16.81925297432941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37b5a23a5f968d%3A0x9d122a4ea0af2119!2sVenkateshwara%20Dealers%20-%20SAMUDRA%20PUMPS%20Authorized%20dealer%20(REDDY%20GARI%20FOUNDRE)!5e0!3m2!1sen!2sin!4v1757394051274!5m2!1sen!2sin" width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="contact-panel map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30553.145216376906!2d81.49535691608094!3d16.81925297432941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37b5a23a5f968d%3A0x9d122a4ea0af2119!2sVenkateshwara%20Dealers%20-%20SAMUDRA%20PUMPS%20Authorized%20dealer%20(REDDY%20GARI%20FOUNDRE)!5e0!3m2!1sen!2sin!4v1757394051274!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
@@ -380,50 +548,261 @@
   <footer>
     <div class="container">
       <div>
-        <div class="brand"><div class="logo">🌿</div><span>Venkateshwara Dealers</span></div>
-        <p class="muted">High-efficiency pumps for Indian agriculture. © <span id="year"></span> Venkateshwara Dealers.</p>
-      </div>
-      <div>
-        <h4>Products</h4>
-        <ul>
-          <li><a href="#products">Submersible</a></li>
-          <li><a href="#products">Centrifugal</a></li>
-          <li><a href="#products">Monoblock</a></li>
-          <li><a href="#products">Solar compatible</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Company</h4>
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a></a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Support</h4>
-        <ul>
-          <li><a href="#">Warranty</a></li>
-          <li><a href="#">Manuals</a></li>
-          <li><a href="#">Service centers</a></li>
-        </ul>
+        <div class="brand"><div class="logo">🌿</div><span data-i18n="brand_name">Venkateshwara Dealers</span></div>
+        <p class="muted" data-i18n="footer_text">High-efficiency pumps for Indian agriculture. © <span id="year"></span> Venkateshwara Dealers.</p>
       </div>
     </div>
     <div class="subfooter">
-      <div class="container">Made with ❤️ for farmers</div>
+      <div class="container" data-i18n="subfooter_text">Made with ❤️ for farmers</div>
     </div>
   </footer>
 
   <div class="floating">
-    <a class="fab" href="#tool">Find my pump</a>
-    <a class="fab" href="https://wa.me/0000000000" target="_blank" rel="noreferrer noopener">Chat on WhatsApp</a>
+    <a class="fab" href="#tool" data-i18n="fab_finder">Find my pump</a>
+    <a class="fab" href="https://wa.me/0000000000" target="_blank" rel="noreferrer noopener" data-i18n="fab_whatsapp">Chat on WhatsApp</a>
   </div>
 
   <script>
+    const translations = {
+      en: {
+        topbar_text: '🇮🇳 Trusted by Godavari farmers Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)',
+        brand_name: 'Venkateshwara Dealers',
+        nav_products: 'Products',
+        nav_finder: 'Pump Finder',
+        nav_contact: 'Contact',
+        hero_chip: 'Energy-efficient • ISI certified',
+        hero_title: 'Reliable pumps for Indian farms.',
+        hero_para: 'From borewell submersibles to high-head centrifugal pumps, we build irrigation solutions that save power, deliver consistent discharge, and last through tough seasons.',
+        hero_metric1: 'Head range',
+        hero_metric2: 'Discharge',
+        hero_metric3: 'Power options',
+        hero_help: 'Proven in paddy, sugarcane, horticulture & more.',
+        prod_heading: 'Popular Pump Lines',
+        prod_para: 'Built for borewells, open wells, and surface sources.',
+        prod_chip1: 'Borewell',
+        prod_title1: '4" Submersible',
+        prod_desc1: 'Deep borewell use, high efficiency with stainless steel stages.',
+        prod_btn1: 'See if it fits →',
+        prod_chip2: 'Open Well / Surface',
+        prod_title2: 'High-Head Centrifugal',
+        prod_desc2: 'Ideal for sprinklers & undulating farms with moderate head.',
+        prod_btn2: 'Check compatibility →',
+        prod_chip3: 'Surface',
+        prod_title3: 'Monoblock',
+        prod_desc3: 'Affordable workhorse for small farms and drip lines.',
+        prod_btn3: 'Compare →',
+        tool_heading: 'Pump Recommendation Tool',
+        tool_para: 'Answer a few questions and get tailored pump suggestions.',
+        finder_heading: 'Your Farm Details',
+        label_crop: 'Primary crop',
+        label_area: 'Farm area (acres)',
+        label_source: 'Water source',
+        label_depth: 'Static water level (m)',
+        label_head: 'Total head required (m)',
+        label_flow: 'Desired discharge (LPM)',
+        label_method: 'Irrigation method',
+        label_phase: 'Power supply',
+        label_budget: 'Budget',
+        ph_area: 'e.g., 3',
+        ph_depth: 'e.g., 45',
+        ph_head: 'e.g., 60',
+        ph_flow: 'e.g., 120',
+        option_crop1: 'Rice / Paddy',
+        option_crop2: 'Wheat',
+        option_crop3: 'Sugarcane',
+        option_crop4: 'Vegetables',
+        option_crop5: 'Orchard / Horticulture',
+        option_crop6: 'Other / Mixed',
+        option_source1: 'Open Well / Tank',
+        option_source2: 'Borewell',
+        option_source3: 'Canal / River',
+        option_method1: 'Flood',
+        option_method2: 'Sprinkler',
+        option_method3: 'Drip',
+        option_phase1: 'Single-phase (220V)',
+        option_phase2: 'Three-phase (415V)',
+        option_budget1: 'Economy',
+        option_budget2: 'Mid',
+        option_budget3: 'Premium',
+        tool_help: 'Tip: Head is the vertical lift + friction losses. If unsure, add 20% safety.',
+        btn_recommend: 'Get Recommendations',
+        btn_reset: 'Reset',
+        suggested_heading: 'Suggested Pumps',
+        summary_initial: 'Fill the form and click <strong>Get Recommendations</strong>.',
+        summary_result: 'For a <strong>{source}</strong> with <strong>{head} m</strong> head and <strong>{flow} LPM</strong> for <strong>{method}</strong> irrigation on <strong>{area} acres</strong>, we suggest:',
+        no_match: 'No exact match found. Try adjusting head/flow or contact our team for a custom build.',
+        result_btn: 'Get quote',
+        band_strong: 'Need help sizing pipe & cables?',
+        band_span: 'Our engineers can share a full BOQ with losses and efficiency estimates.',
+        band_btn: 'Talk to an expert',
+        about_heading: 'Why farmers choose Venkateshwara Dealers',
+        about_para: 'We combine efficiency, durability, and fast service.',
+        about_title1: 'Energy-efficient by design',
+        about_desc1: 'ISI-marked motors, copper windings, and optimized hydraulic designs save 10–18% power vs. market average.',
+        about_title2: 'Rugged for Indian conditions',
+        about_desc2: 'Sand-tolerant stages and robust bearings ensure long life even in challenging water quality.',
+        about_title3: 'Fast parts & service',
+        about_desc3: 'Nationwide dealer network with 48–72 hr turnaround on most spares.',
+        about_title4: 'Solar-ready options',
+        about_desc4: 'Compatible VFD and MPPT controllers available for off-grid irrigation.',
+        contact_heading: 'Contact & Enquiries',
+        address_heading: 'Address',
+        footer_text: 'High-efficiency pumps for Indian agriculture. © <span id="year"></span> Venkateshwara Dealers.',
+        subfooter_text: 'Made with ❤️ for farmers',
+        fab_finder: 'Find my pump',
+        fab_whatsapp: 'Chat on WhatsApp',
+      },
+      te: {
+        topbar_text: 'గోదావరి రైతుల నమ్మకానికి నిలువుటద్దం. విచారణలు: శ్రీ. సిద్ధార్థ రెడ్డి - +91 89853 14256, +91 94949 09126 | పనివేళలు: (ఉ. 9 నుండి సా. 8 వరకు)',
+        brand_name: 'వెంకటేశ్వర డీలర్స్',
+        nav_products: 'ఉత్పత్తులు',
+        nav_finder: 'పంపు ఫైండర్',
+        nav_contact: 'సంప్రదించండి',
+        hero_chip: 'శక్తి-సమర్థవంతమైన • ISI ధృవీకరించబడింది',
+        hero_title: 'భారతీయ పొలాలకు నమ్మకమైన పంపులు.',
+        hero_para: 'బోర్వెల్ సబ్మెర్సిబుల్స్ నుండి అధిక-హెడ్ సెంట్రిఫ్యూగల్ పంపుల వరకు, మేము విద్యుత్ ఆదా చేసే, స్థిరమైన డిశ్చార్జ్ అందించే మరియు కఠినమైన కాలంలో కూడా మన్నికైన నీటిపారుదల పరిష్కారాలను రూపొందిస్తాము.',
+        hero_metric1: 'హెడ్ పరిధి',
+        hero_metric2: 'డిశ్చార్జ్',
+        hero_metric3: 'శక్తి ఎంపికలు',
+        hero_help: 'వరి, చెరకు, ఉద్యానవనం మరియు మరిన్నింటిలో నిరూపించబడింది.',
+        prod_heading: 'ప్రసిద్ధ పంపు లైన్లు',
+        prod_para: 'బోర్వెల్స్, ఓపెన్ వెల్స్ మరియు ఉపరితల వనరుల కోసం నిర్మించబడింది.',
+        prod_chip1: 'బోర్వెల్',
+        prod_title1: '4" సబ్మెర్సిబుల్',
+        prod_desc1: 'లోతైన బోర్వెల్ వాడకం, స్టెయిన్‌లెస్ స్టీల్ స్టేజ్‌లతో అధిక సామర్థ్యం.',
+        prod_btn1: 'ఇది సరిపోతుందో లేదో చూడండి →',
+        prod_chip2: 'ఓపెన్ వెల్ / ఉపరితలం',
+        prod_title2: 'అధిక-హెడ్ సెంట్రిఫ్యూగల్',
+        prod_desc2: 'స్ప్రింక్లర్లకు మరియు మధ్యస్థ హెడ్‌తో ఉండే ఎగుడుదిగుడు పొలాలకు ఆదర్శం.',
+        prod_btn2: 'అనుకూలతను తనిఖీ చేయండి →',
+        prod_chip3: 'ఉపరితలం',
+        prod_title3: 'మోనోబ్లాక్',
+        prod_desc3: 'చిన్న పొలాలకు మరియు డ్రిప్ లైన్‌లకు అందుబాటులో ఉండే వర్క్‌హార్స్.',
+        prod_btn3: 'పోల్చండి →',
+        tool_heading: 'పంపు సిఫార్సు సాధనం',
+        tool_para: 'కొన్ని ప్రశ్నలకు సమాధానం ఇవ్వండి మరియు అనుకూలమైన పంపు సూచనలను పొందండి.',
+        finder_heading: 'మీ పొలం వివరాలు',
+        label_crop: 'ప్రధాన పంట',
+        label_area: 'పొలం విస్తీర్ణం (ఎకరాలు)',
+        label_source: 'నీటి వనరు',
+        label_depth: 'స్థిరమైన నీటి మట్టం (మీ)',
+        label_head: 'అవసరమైన మొత్తం హెడ్ (మీ)',
+        label_flow: 'కావలసిన డిశ్చార్జ్ (LPM)',
+        label_method: 'నీటిపారుదల పద్ధతి',
+        label_phase: 'విద్యుత్ సరఫరా',
+        label_budget: 'బడ్జెట్',
+        ph_area: 'ఉదా. 3',
+        ph_depth: 'ఉదా. 45',
+        ph_head: 'ఉదా. 60',
+        ph_flow: 'ఉదా. 120',
+        option_crop1: 'వరి',
+        option_crop2: 'గోధుమ',
+        option_crop3: 'చెరకు',
+        option_crop4: 'కూరగాయలు',
+        option_crop5: 'పండ్ల తోట / ఉద్యానవనం',
+        option_crop6: 'ఇతర / మిశ్రమ',
+        option_source1: 'ఓపెన్ వెల్ / ట్యాంక్',
+        option_source2: 'బోర్వెల్',
+        option_source3: 'కాలువ / నది',
+        option_method1: 'నీటిపారుదల',
+        option_method2: 'స్ప్రింక్లర్',
+        option_method3: 'డ్రిప్',
+        option_phase1: 'సింగిల్-ఫేజ్ (220V)',
+        option_phase2: 'త్రీ-ఫేజ్ (415V)',
+        option_budget1: 'ఎకానమీ',
+        option_budget2: 'మిడ్',
+        option_budget3: 'ప్రీమియం',
+        tool_help: 'చిట్కా: హెడ్ అనేది నిలువు లిఫ్ట్ + రాపిడి నష్టాలు. ఖచ్చితంగా తెలియకపోతే, 20% భద్రతను జోడించండి.',
+        btn_recommend: 'సిఫార్సులను పొందండి',
+        btn_reset: 'రీసెట్',
+        suggested_heading: 'సూచించబడిన పంపులు',
+        summary_initial: 'ఫారమ్‌ను పూరించి <strong>సిఫార్సులను పొందండి</strong> క్లిక్ చేయండి.',
+        summary_result: '<strong>{source}</strong>, <strong>{head} మీ</strong> హెడ్ మరియు <strong>{flow} LPM</strong> డిశ్చార్జ్‌తో <strong>{area} ఎకరాల</strong> పొలానికి <strong>{method}</strong> పద్ధతిలో నీటిపారుదల కోసం, మేము సూచించే పంపులు:',
+        no_match: 'ఖచ్చితమైన సరిపోలిక కనుగొనబడలేదు. హెడ్/ఫ్లో సర్దుబాటు చేయడానికి ప్రయత్నించండి లేదా కస్టమ్ బిల్డ్ కోసం మా బృందాన్ని సంప్రదించండి.',
+        result_btn: 'కోట్ పొందండి',
+        band_strong: 'పైపులు & కేబుల్స్ కొలతకు సహాయం కావాలా?',
+        band_span: 'మా ఇంజనీర్లు నష్టాలు మరియు సామర్థ్య అంచనాలతో పూర్తి BOQను పంచుకోగలరు.',
+        band_btn: 'నిపుణుడితో మాట్లాడండి',
+        about_heading: 'రైతులు వెంకటేశ్వర డీలర్స్‌ను ఎందుకు ఎంచుకుంటారు',
+        about_para: 'మేము సామర్థ్యం, మన్నిక మరియు వేగవంతమైన సేవలను మిళితం చేస్తాము.',
+        about_title1: 'డిజైన్ ద్వారా శక్తి-సమర్థవంతమైన',
+        about_desc1: 'ISI-మార్క్ చేసిన మోటార్లు, రాగి వైండింగ్‌లు మరియు ఆప్టిమైజ్ చేయబడిన హైడ్రాలిక్ డిజైన్‌లు మార్కెట్ సగటుతో పోలిస్తే 10–18% విద్యుత్‌ను ఆదా చేస్తాయి.',
+        about_title2: 'భారతీయ పరిస్థితులకు కఠినమైనది',
+        about_desc2: 'ఇసుకను తట్టుకునే దశలు మరియు బలమైన బేరింగ్‌లు సవాలు చేసే నీటి నాణ్యతలో కూడా సుదీర్ఘ జీవితాన్ని నిర్ధారిస్తాయి.',
+        about_title3: 'వేగవంతమైన భాగాలు & సేవ',
+        about_desc3: 'చాలా విడిభాగాలపై 48–72 గంటల వ్యవధిలో దేశవ్యాప్త డీలర్ నెట్‌వర్క్.',
+        about_title4: 'సోలార్-రెడీ ఎంపికలు',
+        about_desc4: 'ఆఫ్-గ్రిడ్ నీటిపారుదల కోసం అనుకూలమైన VFD మరియు MPPT కంట్రోలర్‌లు అందుబాటులో ఉన్నాయి.',
+        contact_heading: 'సంప్రదించండి & విచారణలు',
+        address_heading: 'చిరునామా',
+        footer_text: 'భారతీయ వ్యవసాయానికి అధిక-సామర్థ్య పంపులు. © <span id="year"></span> వెంకటేశ్వర డీలర్స్.',
+        subfooter_text: 'రైతుల కోసం ❤️తో తయారు చేయబడింది',
+        fab_finder: 'నా పంపును కనుగొనండి',
+        fab_whatsapp: 'వాట్సాప్‌లో చాట్ చేయండి',
+      },
+    };
+
     const yearEl = document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
 
-    // Demo product catalog with rough specs (head in meters, flow in LPM)
+    const languageSwitcher = document.getElementById('language-switcher');
+    const mobileLanguageSwitcher = document.getElementById('mobile-language-switcher');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navContainer = document.getElementById('nav-container');
+
+    function setLanguage(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+          element.setAttribute('placeholder', translations[lang][key]);
+        }
+      });
+      const summaryEl = document.getElementById('summary');
+      if (summaryEl.getAttribute('data-i18n') === 'summary_initial') {
+        const translation = translations[lang]['summary_initial'];
+        if (translation) {
+          summaryEl.innerHTML = translation.replace(/<strong>(.*?)<\/strong>/g, (match, p1) => `<strong>${p1}</strong>`);
+        }
+      }
+      
+      document.querySelectorAll('select').forEach(select => {
+          select.querySelectorAll('option').forEach(option => {
+              const key = option.getAttribute('data-i18n');
+              if (translations[lang][key]) {
+                  option.textContent = translations[lang][key];
+              }
+          });
+      });
+    }
+
+    languageSwitcher.addEventListener('change', (e) => {
+      mobileLanguageSwitcher.value = e.target.value;
+      setLanguage(e.target.value);
+    });
+
+    mobileLanguageSwitcher.addEventListener('change', (e) => {
+      languageSwitcher.value = e.target.value;
+      setLanguage(e.target.value);
+    });
+
+    menuToggle.addEventListener('click', () => {
+      navContainer.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.mobile-nav-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        navContainer.classList.remove('active');
+      });
+    });
+
+    setLanguage(languageSwitcher.value);
+
     const catalog = [
       { id: 'S4-10', name: 'Aqua 4" Submersible 1.0HP', type: 'submersible-4in', phase: 'single', headMin: 25, headMax: 80, flowMin: 20, flowMax: 120, hp: 1.0, bestFor: ['Borewell','Drip','Flood'], price: 'Mid' },
       { id: 'S4-15', name: 'Aqua 4" Submersible 1.5HP', type: 'submersible-4in', phase: 'single', headMin: 30, headMax: 110, flowMin: 30, flowMax: 160, hp: 1.5, bestFor: ['Borewell','Drip','Sprinkler'], price: 'Mid' },
@@ -436,55 +815,87 @@
       { id: 'S4-20-SP', name: 'Solar-Ready 4" Submersible 2HP', type: 'submersible-4in', phase: 'single', headMin: 40, headMax: 120, flowMin: 60, flowMax: 180, hp: 2, bestFor: ['Borewell','Drip','Sprinkler'], price: 'Premium' }
     ];
 
-    // Helper: score closeness to required head/flow, filter by rules
     function recommend(options) {
       const { source, depth, head, flow, method, phase, budget, area } = options;
-
-      // Decide target pump families by rule of thumb
       let preferredTypes = new Set();
-      if (source === 'Borewell') {
+      const currentLang = languageSwitcher.value;
+
+      const sourceMap = {
+        'Open Well / Tank': 'Open Well / Tank',
+        'Borewell': 'Borewell',
+        'Canal / River': 'Canal / River',
+        'ఓపెన్ వెల్ / ట్యాంక్': 'Open Well / Tank',
+        'బోర్వెల్': 'Borewell',
+        'కాలువ / నది': 'Canal / River'
+      };
+      
+      const methodMap = {
+        'Flood': 'Flood',
+        'Sprinkler': 'Sprinkler',
+        'Drip': 'Drip',
+        'నీటిపారుదల': 'Flood',
+        'స్ప్రింక్లర్': 'Sprinkler',
+        'డ్రిప్': 'Drip'
+      };
+
+      const budgetMap = {
+        'Economy': 'Economy',
+        'Mid': 'Mid',
+        'Premium': 'Premium',
+        'ఎకానమీ': 'Economy',
+        'మిడ్': 'Mid',
+        'ప్రీమియం': 'Premium'
+      };
+
+      const phaseMap = {
+        'Single-phase (220V)': 'single',
+        'Three-phase (415V)': 'three',
+        'సింగిల్-ఫేజ్ (220V)': 'single',
+        'త్రీ-ఫేజ్ (415V)': 'three'
+      };
+
+      const sourceEn = sourceMap[source];
+      const methodEn = methodMap[method];
+      const budgetEn = budgetMap[budget];
+      const phaseEn = phaseMap[phase];
+
+      if (sourceEn === 'Borewell') {
         if (depth >= 25) preferredTypes.add('submersible-4in');
         if (depth >= 100) preferredTypes.add('submersible-6in');
-      } else if (source === 'Open Well / Tank') {
+      } else if (sourceEn === 'Open Well / Tank') {
         if (head <= 35) preferredTypes.add('monoblock');
         if (head > 25) preferredTypes.add('centrifugal');
-      } else if (source === 'Canal / River') {
+      } else if (sourceEn === 'Canal / River') {
         preferredTypes.add('centrifugal');
         if (flow > 250 || area > 5) preferredTypes.add('vertical-turbine');
       }
 
-      if (method === 'Sprinkler') {
-        // tends to need higher head
+      if (methodEn === 'Sprinkler') {
         preferredTypes.add('centrifugal');
-        if (source === 'Borewell' && head >= 60) preferredTypes.add('submersible-6in');
+        if (sourceEn === 'Borewell' && head >= 60) preferredTypes.add('submersible-6in');
       }
-      if (method === 'Drip' && head <= 40 && source !== 'Borewell') {
+      if (methodEn === 'Drip' && head <= 40 && sourceEn !== 'Borewell') {
         preferredTypes.add('monoblock');
       }
 
-      const phaseKey = phase.includes('Single') ? 'single' : 'three';
-
-      // Budget mapping looseness
       const budgetRank = { 'Economy': 0, 'Mid': 1, 'Premium': 2 };
 
-      // Filter & score
       let candidates = catalog.filter(p =>
         (preferredTypes.size === 0 || preferredTypes.has(p.type)) &&
-        (p.phase === phaseKey || phaseKey === 'three') && // allow 3-phase supply to run single-phase with proper control only if matched; but keep simple now
+        (p.phase === phaseEn || phaseEn === 'three') && 
         p.headMin <= head + 10 && p.headMax >= head - 5 &&
         p.flowMin <= flow + 40 && p.flowMax >= flow - 20
       ).map(p => {
         const headScore = Math.abs(((p.headMin + p.headMax)/2) - head);
         const flowScore = Math.abs(((p.flowMin + p.flowMax)/2) - flow) / 2;
-        const budgetScore = Math.abs((budgetRank[p.price] ?? 1) - (budgetRank[budget] ?? 1)) * 10;
+        const budgetScore = Math.abs((budgetRank[p.price] ?? 1) - (budgetRank[budgetEn] ?? 1)) * 10;
         const total = headScore + flowScore + budgetScore;
         return { ...p, score: total };
       });
 
-      // Relax if empty
       if (candidates.length === 0) {
         candidates = catalog.filter(p =>
-          p.phase === phaseKey &&
+          p.phase === phaseEn &&
           p.headMax >= head && p.flowMax >= flow
         ).map(p => ({ ...p, score: (p.headMax - head) + (p.flowMax - flow) }));
       }
@@ -494,54 +905,77 @@
     }
 
     function renderResults(list, summaryText) {
+      const currentLang = languageSwitcher.value;
       const resultsEl = document.getElementById('results');
       const summaryEl = document.getElementById('summary');
       resultsEl.innerHTML = '';
       summaryEl.innerHTML = summaryText;
 
       if (!list.length) {
-        resultsEl.innerHTML = '<div class="help">No exact match found. Try adjusting head/flow or contact our team for a custom build.</div>';
+        summaryEl.textContent = translations[currentLang].no_match;
         return;
       }
+      
+      const getTranslatedName = (type) => {
+        const lang = languageSwitcher.value;
+        const typeMap = {
+          'submersible-4in': lang === 'te' ? '4" సబ్మెర్సిబుల్' : '4" Submersible',
+          'submersible-6in': lang === 'te' ? '6" సబ్మెర్సిబుల్' : '6" Submersible',
+          'centrifugal': lang === 'te' ? 'సెంట్రిఫ్యూగల్' : 'Centrifugal',
+          'monoblock': lang === 'te' ? 'మోనోబ్లాక్' : 'Monoblock',
+          'vertical-turbine': lang === 'te' ? 'వర్టికల్ టర్బైన్' : 'Vertical Turbine'
+        };
+        return typeMap[type] || type;
+      };
 
       list.forEach(p => {
         const node = document.createElement('div');
         node.className = 'result';
         node.innerHTML = `<div>
             <strong>${p.name}</strong>
-            <div class="specs">Type: ${p.type.replace('-', ' ')} • ${p.hp} HP • Phase: ${p.phase}</div>
-            <div class="specs">Head: ${p.headMin}-${p.headMax} m • Flow: ${p.flowMin}-${p.flowMax} LPM</div>
-            <div class="specs">Price band: ${p.price}</div>
+            <div class="specs">${translations[currentLang].label_type || 'Type'}: ${getTranslatedName(p.type)} • ${p.hp} HP • ${translations[currentLang].label_phase || 'Phase'}: ${p.phase === 'single' ? (currentLang === 'te' ? 'సింగిల్' : 'Single') : (currentLang === 'te' ? 'త్రీ-ఫేజ్' : 'Three-phase')}</div>
+            <div class="specs">${translations[currentLang].hero_metric1 || 'Head'}: ${p.headMin}-${p.headMax} m • ${translations[currentLang].hero_metric2 || 'Flow'}: ${p.flowMin}-${p.flowMax} LPM</div>
+            <div class="specs">${translations[currentLang].label_budget || 'Price band'}: ${translations[currentLang][`option_budget${p.price === 'Economy' ? 1 : p.price === 'Mid' ? 2 : 3}`]}</div>
           </div>
           <div>
-            <a class="btn" href="#contact">Get quote</a>
+            <a class="btn" href="#contact">${translations[currentLang].result_btn}</a>
           </div>`;
         resultsEl.appendChild(node);
       });
     }
 
     document.getElementById('recommendBtn').addEventListener('click', () => {
-      const crop = document.getElementById('crop').value;
+      const currentLang = languageSwitcher.value;
+      const crop = document.getElementById('crop').options[document.getElementById('crop').selectedIndex].text;
       const area = parseFloat(document.getElementById('area').value || '1');
-      const source = document.getElementById('source').value;
+      const source = document.getElementById('source').options[document.getElementById('source').selectedIndex].text;
       const depth = parseFloat(document.getElementById('depth').value || '0');
       const head = parseFloat(document.getElementById('head').value || '30');
       const flow = parseFloat(document.getElementById('flow').value || '60');
-      const method = document.getElementById('method').value;
-      const phase = document.getElementById('phase').value;
-      const budget = document.getElementById('budget').value;
+      const method = document.getElementById('method').options[document.getElementById('method').selectedIndex].text;
+      const phase = document.getElementById('phase').options[document.getElementById('phase').selectedIndex].text;
+      const budget = document.getElementById('budget').options[document.getElementById('budget').selectedIndex].text;
 
       const suggestions = recommend({ crop, area, source, depth, head, flow, method, phase, budget });
-
-      const summary = `For a <strong>${source.toLowerCase()}</strong> with <strong>${head} m</strong> head and <strong>${flow} LPM</strong> for <strong>${method.toLowerCase()}</strong> irrigation on <strong>${area} acres</strong>, we suggest:`;
-      renderResults(suggestions, summary);
+      
+      const summaryTemplate = translations[currentLang].summary_result;
+      const summaryText = summaryTemplate.replace('{source}', source).replace('{head}', head).replace('{flow}', flow).replace('{method}', method).replace('{area}', area);
+      
+      renderResults(suggestions, summaryText);
     });
 
     document.getElementById('resetBtn').addEventListener('click', () => {
+      const currentLang = languageSwitcher.value;
       document.getElementById('results').innerHTML = '';
-      document.getElementById('summary').textContent = 'Fill the form and click Get Recommendations.';
+      const summaryEl = document.getElementById('summary');
+      summaryEl.innerHTML = translations[currentLang].summary_initial;
       document.querySelectorAll('#tool input').forEach(i => i.value = '');
-      document.querySelector('#budget').value = 'Mid';
+      document.querySelector('#budget').value = currentLang === 'en' ? 'Mid' : 'మిడ్';
+      document.querySelector('#crop').selectedIndex = 0;
+      document.querySelector('#source').selectedIndex = 0;
+      document.querySelector('#method').selectedIndex = 0;
+      document.querySelector('#phase').selectedIndex = 0;
+      document.querySelector('#budget').selectedIndex = 1;
     });
   </script>
 </body>
