@@ -36,6 +36,66 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
 
     /* Header */
+    .language-modal {
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(2,6,23,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+      opacity: 0; /* Initially hidden with opacity */
+      visibility: hidden;
+    }
+    .language-modal.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background-color: var(--card);
+      padding: 2.5rem 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 600px;
+      width: 90%;
+    }
+    .modal-content h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+    }
+    .modal-btn {
+      flex-grow: 1;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      border-radius: 0.8rem;
+      border: 1px solid rgba(2,6,23,0.1);
+      cursor: pointer;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 600;
+      transition: all 0.2s ease-in-out;
+    }
+    .modal-btn:hover {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fff;
+    }
+
     .topbar { background: #c40000; color: #d1fae5; font-size: .9rem; }
     .topbar .container { display: flex; align-items: center; justify-content: space-between; padding: .4rem 1rem; }
 
@@ -273,9 +333,20 @@
   </style>
 </head>
 <body>
+  <div class="language-modal" id="language-modal">
+    <div class="modal-content">
+      <h3>Select Language | భాషను ఎంచుకోండి</h3>
+      <div class="button-group">
+        <button id="lang-en" class="modal-btn">English</button>
+        <button id="lang-te" class="modal-btn">తెలుగు</button>
+      </div>
+    </div>
+  </div>
+
   <div class="topbar">
     <div class="container">
-      <div data-i18n="topbar_text">🇮🇳 Trusted by Godavari farmers Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)</div>
+        <span class="topbar-left" data-i18n="topbar_left">🇮🇳 Trusted by Godavari farmers</span>
+        <span class="topbar-right" data-i18n="topbar_right">Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)</span>
     </div>
   </div>
 
@@ -289,7 +360,7 @@
         <ul>
           <li><a href="#products" data-i18n="nav_products">Products</a></li>
           <li><a href="#tool" data-i18n="nav_finder">Pump Finder</a></li>
-          <li><a href="#contact" class="btn" data-i18n="nav_contact">Contact</a></li>
+          <li><a href="#contact" class="btn" data-i18n="nav_contact">Location</a></li>
           <li>
             <select id="language-switcher">
               <option value="en">English</option>
@@ -305,7 +376,7 @@
         <ul>
           <li><a href="#products" data-i18n="nav_products">Products</a></li>
           <li><a href="#tool" data-i18n="nav_finder">Pump Finder</a></li>
-          <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+          <li><a href="#contact" data-i18n="nav_contact">Location</a></li>
           <li>
             <select id="mobile-language-switcher">
               <option value="en">English</option>
@@ -316,7 +387,9 @@
       </div>
     </div>
   </header>
-
+    <div class="banner">
+      <img src="https://www.samudra.com/samudrapumps/Images/slide_new.webp" alt="Samudra banner - a plant in cupped hands" style="width: 100%; height: auto; display: block;" />
+    </div>
   <section class="hero">
     <div class="container hero-inner">
       <div>
@@ -533,9 +606,9 @@
       <div class="contact-panels">
         <div class="contact-panel">
           <h3 data-i18n="address_heading">Address</h3>
-          <Address>
+          <address>
             Opp. C.W.C Godowns,<br/> Near Sri Chaitanya Techno School,<br/> Nallajarla Road, K.N.Road,<br/> Tadepalligudem, West Godavari,<br/> Andhra Pradesh 534101
-          </Address>
+          </address>
           <p>📞 +91 89853 14256, +91 94949 09126<br/>✉️ hello@Venkateshwara Dealers.example</p>
         </div>
         <div class="contact-panel map-container">
@@ -549,7 +622,7 @@
     <div class="container">
       <div>
         <div class="brand"><div class="logo">🌿</div><span data-i18n="brand_name">Venkateshwara Dealers</span></div>
-        <p class="muted" data-i18n="footer_text">High-efficiency pumps for Indian agriculture. © <span id="year"></span> Venkateshwara Dealers.</p>
+        <p class="muted" data-i18n="footer_text">High-efficiency pumps for Indian agriculture. © 2025 Venkateshwara Dealers.</p>
       </div>
     </div>
     <div class="subfooter">
@@ -563,9 +636,48 @@
   </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('language-modal');
+      const langEnBtn = document.getElementById('lang-en');
+      const langTeBtn = document.getElementById('lang-te');
+
+      // Show the modal with a fade-in effect
+      modal.classList.add('is-active');
+
+      function hideModal(lang) {
+        modal.classList.remove('is-active');
+        setLanguage(lang);
+        languageSwitcher.value = lang;
+        mobileLanguageSwitcher.value = lang;
+      }
+
+      langEnBtn.addEventListener('click', () => {
+        hideModal('en');
+      });
+
+      langTeBtn.addEventListener('click', () => {
+        hideModal('te');
+      });
+
+      // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+      });
+    });
+
     const translations = {
       en: {
-        topbar_text: '🇮🇳 Trusted by Godavari farmers Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)',
+        topbar_left: '🇮🇳 Trusted by Godavari farmers',
+        topbar_right: 'Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)',
         brand_name: 'Venkateshwara Dealers',
         nav_products: 'Products',
         nav_finder: 'Pump Finder',
@@ -647,13 +759,14 @@
         about_desc4: 'Compatible VFD and MPPT controllers available for off-grid irrigation.',
         contact_heading: 'Contact & Enquiries',
         address_heading: 'Address',
-        footer_text: 'High-efficiency pumps for Indian agriculture. © <span id="year"></span> Venkateshwara Dealers.',
+        footer_text: 'High-efficiency pumps for Indian agriculture. © 2025 Venkateshwara Dealers.',
         subfooter_text: 'Made with ❤️ for farmers',
         fab_finder: 'Find my pump',
         fab_whatsapp: 'Chat on WhatsApp',
       },
       te: {
-        topbar_text: 'గోదావరి రైతుల నమ్మకానికి నిలువుటద్దం. విచారణలు: శ్రీ. సిద్ధార్థ రెడ్డి - +91 89853 14256, +91 94949 09126 | పనివేళలు: (ఉ. 9 నుండి సా. 8 వరకు)',
+        topbar_left: 'గోదావరి రైతుల నమ్మకానికి నిలువుటద్దం.',
+        topbar_right: 'విచారణలు: శ్రీ. సిద్ధార్థ రెడ్డి - +91 89853 14256, +91 94949 09126 | పనివేళలు: (ఉ. 9 నుండి సా. 8 వరకు)',
         brand_name: 'వెంకటేశ్వర డీలర్స్',
         nav_products: 'ఉత్పత్తులు',
         nav_finder: 'పంపు ఫైండర్',
@@ -735,7 +848,7 @@
         about_desc4: 'ఆఫ్-గ్రిడ్ నీటిపారుదల కోసం అనుకూలమైన VFD మరియు MPPT కంట్రోలర్‌లు అందుబాటులో ఉన్నాయి.',
         contact_heading: 'సంప్రదించండి & విచారణలు',
         address_heading: 'చిరునామా',
-        footer_text: 'భారతీయ వ్యవసాయానికి అధిక-సామర్థ్య పంపులు. © <span id="year"></span> వెంకటేశ్వర డీలర్స్.',
+        footer_text: 'భారతీయ వ్యవసాయానికి అధిక-సామర్థ్య పంపులు. © 2025 వెంకటేశ్వర డీలర్స్.',
         subfooter_text: 'రైతుల కోసం ❤️తో తయారు చేయబడింది',
         fab_finder: 'నా పంపును కనుగొనండి',
         fab_whatsapp: 'వాట్సాప్‌లో చాట్ చేయండి',
@@ -755,8 +868,9 @@
         const key = element.getAttribute('data-i18n');
         if (translations[lang][key]) {
           element.textContent = translations[lang][key];
-        }
+       }
       });
+
       document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
         const key = element.getAttribute('data-i18n-placeholder');
         if (translations[lang][key]) {
