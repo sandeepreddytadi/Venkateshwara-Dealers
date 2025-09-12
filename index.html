@@ -29,8 +29,8 @@
       background: var(--bg);
       line-height: 1.6;
     }
-    a { color: var(--brand-600); text-decoration: none; }
-    a:hover { color: var(--brand-700); }
+    a, .lang-heading { color: var(--brand-600); text-decoration: none; }
+    a:hover, .lang-heading:hover { color: var(--brand-700); }
 
     /* Layout */
     .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
@@ -97,8 +97,15 @@
     }
 
     .topbar { background: #c40000; color: #d1fae5; font-size: .9rem; }
-    .topbar .container { display: flex; align-items: center; justify-content: space-between; padding: .4rem 1rem; }
-
+    .topbar .container { display: flex; align-items: center; justify-content: center; padding: .4rem 1rem; }
+    .topbar-content { 
+      white-space: nowrap; 
+    }
+    .topbar a { 
+      font-weight: bold; 
+      color: #d1fae5;
+    }
+    
     header.nav {
       position: sticky; top: 0; z-index: 20;
       backdrop-filter: saturate(1.2) blur(6px);
@@ -113,18 +120,80 @@
     .btn { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid rgba(2,6,23,.08); padding: .6rem .9rem; border-radius: .8rem; background: #fff; box-shadow: var(--shadow); font-weight: 600; }
     .btn.primary { background: var(--brand); color: #fff; border-color: transparent; }
     .btn.primary:hover { background: var(--brand-600); }
+    /* Language Dropdown Styles */
+.language-select-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.language-select-container .lang-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--card);
+  border: 1px solid rgba(2, 6, 23, 0.08);
+  border-radius: 0.8rem;
+  padding: 0.5rem;
+  box-shadow: var(--shadow);
+  z-index: 10;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+.language-select-container:hover .lang-options {
+  display: flex;
+}
+
+.lang-link {
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.lang-link:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
+.lang-link.is-active {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* Mobile language dropdown (hidden by default) */
+.mobile-language-select .lang-options {
+  display: none;
+  flex-direction: row;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.mobile-language-select.open .lang-options {
+  display: flex;
+}
+
+.mobile-language-select .lang-heading {
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
     
     /* Hamburger Menu */
+    /* NEW: Change hamburger menu position and styling */
     .menu-toggle {
       display: none;
       background: none;
       border: none;
       cursor: pointer;
       padding: 0;
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       position: relative;
-      z-index: 30;
+      z-index: 80;
     }
     .menu-toggle .hamburger-icon,
     .menu-toggle .hamburger-icon::before,
@@ -150,50 +219,64 @@
       top: 8px;
     }
 
-    .nav-inner.active .menu-toggle .hamburger-icon {
-      transform: rotate(45deg);
-    }
-    .nav-inner.active .menu-toggle .hamburger-icon::before {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    .nav-inner.active .menu-toggle .hamburger-icon::after {
-      transform: rotate(-90deg) translateY(-8px);
-    }
-
-    /* Mobile Menu */
+    /* MODIFIED: The mobile nav is now a sidebar that overlays the content */
     .mobile-nav-menu {
-      display: none;
+      display: none; /* Keep this for desktop but override for mobile */
       position: fixed;
-      top: 0;
+      top: 2.5rem;
       right: 0;
       width: 100%;
-      height: 100%;
-      background: rgba(250,250,250,.95);
+      height: 100vh;
+      background: rgba(250,250,250,.95); 
       backdrop-filter: blur(8px);
-      z-index: 25;
-      padding-top: 80px;
+      z-index: 90;
+      padding-top: 50px;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease;
-      transform: translateX(100%);
+      transition: transform 0.5s ease; /* Smooth transition */
+      overflow-x: hidden;
+      transform: translateX(100%); /* Hides the sidebar by default */
     }
-    .nav-inner.active .mobile-nav-menu {
-      display: flex;
-      transform: translateX(0);
+    /* MODIFIED: Styles for open sidebar */
+    .mobile-nav-menu.is-active {
+        transform: translateX(0); /* Moves it into view */
+        padding-top: 60px;
+    }
+    .mobile-nav-menu a {
+        text-decoration: none;
+        font-size: 20px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .mobile-nav-menu a:hover {
+        color: #f1f1f1;
+    }
+    .mobile-nav-menu .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
     }
 
     .mobile-nav-menu ul {
       flex-direction: column;
       gap: 2rem;
       width: 100%;
-      text-align: center;
+      list-style: none;
+      padding: 0;
+      margin-left: 40%;
     }
-    .mobile-nav-menu li a {
-      font-size: 1.5rem;
+    
+    .mobile-nav-menu li a, .mobile-nav-menu li .lang-heading {
+      font-size: 1.2rem;
       font-weight: 600;
-      padding: 0.5rem 0;
+      color: var(--brand-600); text-decoration: none;
+    }
+    .mobile-nav-menu li a:hover, .mobile-nav-menu li .lang-heading:hover {
+        color: var(--brand-700);
     }
 
     /* Hero */
@@ -284,52 +367,139 @@
     .floating .fab:hover { background: var(--brand-600); }
 
     /* Responsive adjustments for Contact section */
-    .contact-panels {
-      display: grid;
-      grid-template-columns: 1fr 1fr; 
-      gap: 1.2rem;
-      align-items: stretch;
-    }
-    .contact-panel {
-      background: #fff;
-      border: 1px solid rgba(2, 6, 23, 0.06);
-      border-radius: 18px;
-      padding: 1rem;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-    }
-    .map-container {
-      flex-grow: 1;
-      height: 100%;
-      min-height: 250px;
-    }
-    .map-container iframe {
-      width: 100%;
-      height: 100%;
-      border-radius: 16px;
-    }
+.contact-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  align-items: stretch;
+}
+.contact-panel {
+  background: #fff;
+  border: 1px solid rgba(2, 6, 23, 0.06);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.map-container {
+  flex-grow: 1;
+  height: 100%;
+  min-height: 250px;
+}
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+}
 
-    /* Responsive */
-    @media (max-width: 980px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .tool { grid-template-columns: 1fr; } 
-      .result-list { grid-template-columns: 1fr; }
-      footer .container { grid-template-columns: 1fr 1fr; }
-      .card { grid-column: span 6; }
-      .contact-panels { grid-template-columns: 1fr; }
-      
-      /* Mobile nav */
-      nav ul { display: none; }
-      .menu-toggle { display: block; }
-    }
-    @media (max-width: 640px) {
-      .metrics { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: repeat(6, 1fr); }
-      .card { grid-column: span 6; }
-      footer .container { grid-template-columns: 1fr; }
-      .contact-panels { grid-template-columns: 1fr; } 
-    }
+/* Responsive adjustments for Contact section */
+.contact-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  align-items: stretch;
+}
+.contact-panel {
+  background: #fff;
+  border: 1px solid rgba(2, 6, 23, 0.06);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.map-container {
+  flex-grow: 1;
+  height: 100%;
+  min-height: 250px;
+}
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    padding: 1.6rem 0 1.4rem; /* Halved from original 3.2rem/2.8rem */
+  }
+  .hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem); /* Significantly reduced */
+  }
+  .hero p {
+    font-size: 0.8rem; /* Reduced */
+  }
+  .section-head h2 {
+    font-size: 1.2rem; /* Reduced */
+  }
+  .tool {
+    grid-template-columns: 1fr;
+  }
+  .result-list { 
+    grid-template-columns: 1fr; 
+  }
+  .card { 
+    grid-column: span 6; 
+  }
+  .contact-panels {
+    grid-template-columns: 1fr;
+  }
+  .topbar-content {
+    font-size: 0.6rem; /* Reduced */
+    white-space: normal;
+  }
+  
+  /* Mobile nav */
+  nav ul {
+    display: none;
+  }
+  /* NEW: Show only the hamburger on mobile */
+  .nav-inner .menu-toggle {
+    display: block;
+    order: 2; /* Place it on the far left */
+  }
+  .nav-inner .brand {
+    flex-grow: 0;
+    justify-content: center;
+  }
+  .floating {
+    right: 0.5rem; /* Reduced */
+    bottom: 0.5rem; /* Reduced */
+  }
+  .fab {
+    padding: 0.5rem 0.7rem; /* Reduced */
+    font-size: 0.7rem; /* Reduced */
+  }
+  
+  /** FIX: Show the mobile menu correctly on smaller screens. **/
+  .mobile-nav-menu {
+      display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 10px 0.8rem; /* Reduced */
+  }
+  .hero h1 {
+    font-size: 1.5rem; /* Further reduced */
+  }
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+  .grid { 
+    grid-template-columns: repeat(6, 1fr); 
+  }
+  .card { 
+    grid-column: span 6; 
+  }
+  footer .container { 
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 <body>
@@ -345,13 +515,13 @@
 
   <div class="topbar">
     <div class="container">
-        <span class="topbar-left" data-i18n="topbar_left">🇮🇳 Trusted by Godavari farmers</span>
-        <span class="topbar-right" data-i18n="topbar_right">Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)</span>
+      <span class="topbar-content" data-i18n="topbar_full"></span>
     </div>
   </div>
 
   <header class="nav">
     <div class="container nav-inner" id="nav-container">
+
       <div class="brand">
         <div class="logo" aria-hidden="true">🌿</div>
         <span data-i18n="brand_name">Venkateshwara Dealers</span>
@@ -360,34 +530,39 @@
         <ul>
           <li><a href="#products" data-i18n="nav_products">Products</a></li>
           <li><a href="#tool" data-i18n="nav_finder">Pump Finder</a></li>
-          <li><a href="#contact" class="btn" data-i18n="nav_contact">Location</a></li>
-          <li>
-            <select id="language-switcher">
-              <option value="en">English</option>
-              <option value="te">తెలుగు</option>
-            </select>
+          <li class="language-select-container">
+          <div class="lang-heading" data-i18n="language_heading">Language</div>
+            <div class="lang-options">
+              <a href="#" class="lang-link" data-lang="en">English</a>
+              <a href="#" class="lang-link" data-lang="te">తెలుగు</a>
+            </div>
           </li>
+          <li><a href="#contact" class="btn" data-i18n="nav_contact">Location</a></li>
         </ul>
       </nav>
-      <button class="menu-toggle" aria-label="Toggle navigation menu">
+      <button class="menu-toggle" aria-label="Toggle navigation menu" onclick="openNav()">
         <span class="hamburger-icon"></span>
       </button>
-      <div class="mobile-nav-menu">
-        <ul>
+      </div>
+  </header>
+  
+  <div class="mobile-nav-menu" id="mySidebar">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+      <ul>
           <li><a href="#products" data-i18n="nav_products">Products</a></li>
           <li><a href="#tool" data-i18n="nav_finder">Pump Finder</a></li>
-          <li><a href="#contact" data-i18n="nav_contact">Location</a></li>
-          <li>
-            <select id="mobile-language-switcher">
-              <option value="en">English</option>
-              <option value="te">తెలుగు</option>
-            </select>
+          <li class="mobile-language-select">
+            <div class="lang-heading" data-i18n="language_heading">Language</div>
+            <div class="lang-options">
+              <a href="#" class="lang-link" data-lang="en">English</a>
+              <a href="#" class="lang-link" data-lang="te">తెలుగు</a>
+            </div>
           </li>
-        </ul>
-      </div>
-    </div>
-  </header>
-    <div class="banner">
+          <li><a href="#contact" data-i18n="nav_contact">Location</a></li>
+      </ul>
+  </div>
+
+  <div class="banner">
       <img src="https://www.samudra.com/samudrapumps/Images/slide_new.webp" alt="Samudra banner - a plant in cupped hands" style="width: 100%; height: auto; display: block;" />
     </div>
   <section class="hero">
@@ -606,9 +781,7 @@
       <div class="contact-panels">
         <div class="contact-panel">
           <h3 data-i18n="address_heading">Address</h3>
-          <address>
-            Opp. C.W.C Godowns,<br/> Near Sri Chaitanya Techno School,<br/> Nallajarla Road, K.N.Road,<br/> Tadepalligudem, West Godavari,<br/> Andhra Pradesh 534101
-          </address>
+          <address> Opp. C.W.C Godowns,<br/> Near Sri Chaitanya Techno School,<br/> Nallajarla Road, K.N.Road,<br/> Tadepalligudem, West Godavari,<br/> Andhra Pradesh 534101 </address>
           <p>📞 +91 89853 14256, +91 94949 09126<br/>✉️ hello@Venkateshwara Dealers.example</p>
         </div>
         <div class="contact-panel map-container">
@@ -632,56 +805,121 @@
 
   <div class="floating">
     <a class="fab" href="#tool" data-i18n="fab_finder">Find my pump</a>
-    <a class="fab" href="https://wa.me/0000000000" target="_blank" rel="noreferrer noopener" data-i18n="fab_whatsapp">Chat on WhatsApp</a>
+    <a class="fab" href="https://api.whatsapp.com/send?phone=910000000000&text=Hi" target="_blank" rel="noreferrer noopener" data-i18n="fab_whatsapp">Chat on WhatsApp</a>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const modal = document.getElementById('language-modal');
-      const langEnBtn = document.getElementById('lang-en');
-      const langTeBtn = document.getElementById('lang-te');
+  const modal = document.getElementById('language-modal');
+  const langEnBtn = document.getElementById('lang-en');
+  const langTeBtn = document.getElementById('lang-te');
+  const navContainer = document.getElementById('nav-container');
+  // Mobile Language Toggle
+const mobileLangSelect = document.querySelector('.mobile-language-select');
+const mobileLangHeading = mobileLangSelect.querySelector('.lang-heading');
 
-      // Show the modal with a fade-in effect
-      modal.classList.add('is-active');
+mobileLangHeading.addEventListener('click', () => {
+  mobileLangSelect.classList.toggle('open');
+});
 
-      function hideModal(lang) {
+  // NEW: Sidebar elements
+  const sidebar = document.getElementById('mySidebar');
+  // const mainContent = document.getElementById('main-content-wrapper'); // REMOVED
+
+  // MODIFIED: Functions to open and close the sidebar
+  function openNav() {
+      sidebar.classList.add('is-active');
+      // mainContent.style.marginLeft = "280px"; // REMOVED
+  }
+  
+  function closeNav() {
+      sidebar.classList.remove('is-active');
+      // mainContent.style.marginLeft = "0"; // REMOVED
+  }
+  
+  // NEW: Add these functions to the global scope so they can be called from the onclick attributes
+  window.openNav = openNav;
+  window.closeNav = closeNav;
+
+  // Show the modal with a fade-in effect
+  modal.classList.add('is-active');
+
+  function hideModal(lang) {
+    modal.classList.remove('is-active');
+    setLanguage(lang);
+  }
+
+  langEnBtn.addEventListener('click', () => {
+    hideModal('en');
+  });
+
+  langTeBtn.addEventListener('click', () => {
+    hideModal('te');
+  });
+
+  // Handle new language links
+  document.querySelectorAll('.lang-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const lang = e.target.getAttribute('data-lang');
+      setLanguage(lang);
+      setLanguageActiveState(lang);
+      // Hide modal if it's active
+      if (modal.classList.contains('is-active')) {
         modal.classList.remove('is-active');
-        setLanguage(lang);
-        languageSwitcher.value = lang;
-        mobileLanguageSwitcher.value = lang;
       }
-
-      langEnBtn.addEventListener('click', () => {
-        hideModal('en');
-      });
-
-      langTeBtn.addEventListener('click', () => {
-        hideModal('te');
-      });
-
-      // Smooth Scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-      });
+      // NEW: Close sidebar after clicking a link
+      closeNav();
     });
+  });
+
+  function setLanguageActiveState(lang) {
+    document.querySelectorAll('.lang-link').forEach(link => {
+      link.classList.remove('is-active');
+      if (link.getAttribute('data-lang') === lang) {
+        link.classList.add('is-active');
+      }
+    });
+  }
+
+  // Smooth Scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+        // NEW: Close sidebar after clicking a link
+        closeNav();
+      }
+    });
+  });
+
+  // Hamburger Menu
+  // OLD: Hamburger toggle functionality is now handled by the openNav/closeNav functions
+  // menuToggle.addEventListener('click', () => {
+  //   navContainer.classList.toggle('active');
+  // });
+
+  // document.querySelectorAll('.mobile-nav-menu a').forEach(link => {
+  //   link.addEventListener('click', () => {
+  //     navContainer.classList.remove('active');
+  //   });
+  // });
+
+  // Set initial language from the modal
+  setLanguage('en');
+  setLanguageActiveState('en');
+});
 
     const translations = {
       en: {
-        topbar_left: '🇮🇳 Trusted by Godavari farmers',
-        topbar_right: 'Enquiries: Mr. Siddhartha Reddy - +91 89853 14256, +91 94949 09126 | Timings: (9 am to 8 pm)',
+        language_heading: 'Language',
+        topbar_full: '🇮🇳 Trusted by Godavari farmers | Enquiries: Mr. Siddhartha Reddy - <a href="tel:+918985314256">+91 89853 14256</a>, <a href="tel:+919494909126">+91 94949 09126</a> | Timings: (9 am to 8 pm)',
         brand_name: 'Venkateshwara Dealers',
         nav_products: 'Products',
         nav_finder: 'Pump Finder',
-        nav_contact: 'Contact',
+        nav_contact: 'Location',
         hero_chip: 'Energy-efficient • ISI certified',
         hero_title: 'Reliable pumps for Indian farms.',
         hero_para: 'From borewell submersibles to high-head centrifugal pumps, we build irrigation solutions that save power, deliver consistent discharge, and last through tough seasons.',
@@ -707,32 +945,32 @@
         tool_para: 'Answer a few questions and get tailored pump suggestions.',
         finder_heading: 'Your Farm Details',
         label_crop: 'Primary crop',
-        label_area: 'Farm area (acres)',
-        label_source: 'Water source',
-        label_depth: 'Static water level (m)',
-        label_head: 'Total head required (m)',
-        label_flow: 'Desired discharge (LPM)',
-        label_method: 'Irrigation method',
-        label_phase: 'Power supply',
-        label_budget: 'Budget',
-        ph_area: 'e.g., 3',
-        ph_depth: 'e.g., 45',
-        ph_head: 'e.g., 60',
-        ph_flow: 'e.g., 120',
         option_crop1: 'Rice / Paddy',
         option_crop2: 'Wheat',
         option_crop3: 'Sugarcane',
         option_crop4: 'Vegetables',
         option_crop5: 'Orchard / Horticulture',
         option_crop6: 'Other / Mixed',
+        label_area: 'Farm area (acres)',
+        ph_area: 'e.g., 3',
+        label_source: 'Water source',
         option_source1: 'Open Well / Tank',
         option_source2: 'Borewell',
         option_source3: 'Canal / River',
+        label_depth: 'Static water level (m)',
+        ph_depth: 'e.g., 45',
+        label_head: 'Total head required (m)',
+        ph_head: 'e.g., 60',
+        label_flow: 'Desired discharge (LPM)',
+        ph_flow: 'e.g., 120',
+        label_method: 'Irrigation method',
         option_method1: 'Flood',
         option_method2: 'Sprinkler',
         option_method3: 'Drip',
+        label_phase: 'Power supply',
         option_phase1: 'Single-phase (220V)',
         option_phase2: 'Three-phase (415V)',
+        label_budget: 'Budget',
         option_budget1: 'Economy',
         option_budget2: 'Mid',
         option_budget3: 'Premium',
@@ -741,9 +979,7 @@
         btn_reset: 'Reset',
         suggested_heading: 'Suggested Pumps',
         summary_initial: 'Fill the form and click <strong>Get Recommendations</strong>.',
-        summary_result: 'For a <strong>{source}</strong> with <strong>{head} m</strong> head and <strong>{flow} LPM</strong> for <strong>{method}</strong> irrigation on <strong>{area} acres</strong>, we suggest:',
-        no_match: 'No exact match found. Try adjusting head/flow or contact our team for a custom build.',
-        result_btn: 'Get quote',
+        summary_result: 'Based on your {source} with {head} m of head, we recommend a pump that can deliver at least {flow} LPM to irrigate your {area} acre farm using a {method} system.',
         band_strong: 'Need help sizing pipe & cables?',
         band_span: 'Our engineers can share a full BOQ with losses and efficiency estimates.',
         band_btn: 'Talk to an expert',
@@ -759,313 +995,204 @@
         about_desc4: 'Compatible VFD and MPPT controllers available for off-grid irrigation.',
         contact_heading: 'Contact & Enquiries',
         address_heading: 'Address',
-        footer_text: 'High-efficiency pumps for Indian agriculture. © 2025 Venkateshwara Dealers.',
+        footer_text: 'High-efficiency pumps for Indian agriculture. © new Date().getFullYear(); Venkateshwara Dealers.',
         subfooter_text: 'Made with ❤️ for farmers',
         fab_finder: 'Find my pump',
         fab_whatsapp: 'Chat on WhatsApp',
+        
+        // Product card recommendations
+        reco_title1: '4" V-Guard Pump',
+        reco_desc1: '1 HP | 25-60m head | 80 LPM | Single-phase',
+        reco_title2: '6" V-Guard Pump',
+        reco_desc2: '3 HP | 45-90m head | 150 LPM | Three-phase',
+        reco_title3: 'Samudra Mini Mono',
+        reco_desc3: '0.5 HP | 10-25m head | 60 LPM | Single-phase',
+        reco_title4: 'Samudra 3" Submersible',
+        reco_desc4: '1 HP | 25-80m head | 50 LPM | Single-phase',
+        reco_title5: 'Samudra High-Head',
+        reco_desc5: '5 HP | 60-120m head | 200 LPM | Three-phase',
+        reco_title6: 'Samudra Open Well',
+        reco_desc6: '2 HP | 15-40m head | 120 LPM | Single-phase',
       },
       te: {
-        topbar_left: 'గోదావరి రైతుల నమ్మకానికి నిలువుటద్దం.',
-        topbar_right: 'విచారణలు: శ్రీ. సిద్ధార్థ రెడ్డి - +91 89853 14256, +91 94949 09126 | పనివేళలు: (ఉ. 9 నుండి సా. 8 వరకు)',
+        language_heading: 'భాష',
+        topbar_full: 'గోదావరి రైతుల నమ్మకానికి నిలువుటద్దం | విచారణలు: శ్రీ. సిద్ధార్థ రెడ్డి - <a href="tel:+918985314256">+91 89853 14256</a>, <a href="tel:+919494909126">+91 94949 09126</a> | పనివేళలు: (ఉ. 9 నుండి సా. 8 వరకు)',
         brand_name: 'వెంకటేశ్వర డీలర్స్',
         nav_products: 'ఉత్పత్తులు',
         nav_finder: 'పంపు ఫైండర్',
         nav_contact: 'సంప్రదించండి',
-        hero_chip: 'శక్తి-సమర్థవంతమైన • ISI ధృవీకరించబడింది',
-        hero_title: 'భారతీయ పొలాలకు నమ్మకమైన పంపులు.',
-        hero_para: 'బోర్వెల్ సబ్మెర్సిబుల్స్ నుండి అధిక-హెడ్ సెంట్రిఫ్యూగల్ పంపుల వరకు, మేము విద్యుత్ ఆదా చేసే, స్థిరమైన డిశ్చార్జ్ అందించే మరియు కఠినమైన కాలంలో కూడా మన్నికైన నీటిపారుదల పరిష్కారాలను రూపొందిస్తాము.',
+        hero_chip: 'శక్తి-సామర్థ్యవంతమైన • ISI ధృవీకరించబడినది',
+        hero_title: 'భారతీయ వ్యవసాయ క్షేత్రాలకు నమ్మకమైన పంపులు.',
+        hero_para: 'బోర్వెల్ సబ్మెర్సిబుల్స్ నుండి హై-హెడ్ సెంట్రిఫుగల్ పంపుల వరకు, మేము శక్తిని ఆదా చేసే, స్థిరమైన డిశ్చార్జిని అందించే, మరియు కఠినమైన సీజన్లలో కూడా నిలిచే నీటిపారుదల పరిష్కారాలను నిర్మిస్తాము.',
         hero_metric1: 'హెడ్ పరిధి',
         hero_metric2: 'డిశ్చార్జ్',
-        hero_metric3: 'శక్తి ఎంపికలు',
-        hero_help: 'వరి, చెరకు, ఉద్యానవనం మరియు మరిన్నింటిలో నిరూపించబడింది.',
+        hero_metric3: 'పవర్ ఎంపికలు',
+        hero_help: 'వరి, చెరకు, ఉద్యానవన పంటలు మొదలైన వాటిలో నిరూపించబడింది.',
         prod_heading: 'ప్రసిద్ధ పంపు లైన్లు',
-        prod_para: 'బోర్వెల్స్, ఓపెన్ వెల్స్ మరియు ఉపరితల వనరుల కోసం నిర్మించబడింది.',
+        prod_para: 'బోర్వెల్స్, ఓపెన్ వెల్స్, మరియు ఉపరితల వనరుల కోసం తయారు చేయబడింది.',
         prod_chip1: 'బోర్వెల్',
         prod_title1: '4" సబ్మెర్సిబుల్',
-        prod_desc1: 'లోతైన బోర్వెల్ వాడకం, స్టెయిన్‌లెస్ స్టీల్ స్టేజ్‌లతో అధిక సామర్థ్యం.',
+        prod_desc1: 'లోతైన బోర్వెల్ ఉపయోగం, స్టెయిన్‌లెస్ స్టీల్ దశలతో అధిక సామర్థ్యం.',
         prod_btn1: 'ఇది సరిపోతుందో లేదో చూడండి →',
         prod_chip2: 'ఓపెన్ వెల్ / ఉపరితలం',
-        prod_title2: 'అధిక-హెడ్ సెంట్రిఫ్యూగల్',
-        prod_desc2: 'స్ప్రింక్లర్లకు మరియు మధ్యస్థ హెడ్‌తో ఉండే ఎగుడుదిగుడు పొలాలకు ఆదర్శం.',
-        prod_btn2: 'అనుకూలతను తనిఖీ చేయండి →',
+        prod_title2: 'హై-హెడ్ సెంట్రిఫుగల్',
+        prod_desc2: 'స్పింక్లర్లు మరియు ఎగుడుదిగుడుగా ఉన్న పొలాలకు అనువైనది.',
+        prod_btn2: 'సరిపోతుందో లేదో తనిఖీ చేయండి →',
         prod_chip3: 'ఉపరితలం',
         prod_title3: 'మోనోబ్లాక్',
-        prod_desc3: 'చిన్న పొలాలకు మరియు డ్రిప్ లైన్‌లకు అందుబాటులో ఉండే వర్క్‌హార్స్.',
+        prod_desc3: 'చిన్న పొలాలు మరియు డ్రిప్ లైన్ల కోసం సరసమైన పనిమంతుడు.',
         prod_btn3: 'పోల్చండి →',
         tool_heading: 'పంపు సిఫార్సు సాధనం',
-        tool_para: 'కొన్ని ప్రశ్నలకు సమాధానం ఇవ్వండి మరియు అనుకూలమైన పంపు సూచనలను పొందండి.',
+        tool_para: 'కొన్ని ప్రశ్నలకు సమాధానం ఇవ్వండి మరియు అనుకూలీకరించిన పంపు సూచనలను పొందండి.',
         finder_heading: 'మీ పొలం వివరాలు',
         label_crop: 'ప్రధాన పంట',
-        label_area: 'పొలం విస్తీర్ణం (ఎకరాలు)',
-        label_source: 'నీటి వనరు',
-        label_depth: 'స్థిరమైన నీటి మట్టం (మీ)',
-        label_head: 'అవసరమైన మొత్తం హెడ్ (మీ)',
-        label_flow: 'కావలసిన డిశ్చార్జ్ (LPM)',
-        label_method: 'నీటిపారుదల పద్ధతి',
-        label_phase: 'విద్యుత్ సరఫరా',
-        label_budget: 'బడ్జెట్',
-        ph_area: 'ఉదా. 3',
-        ph_depth: 'ఉదా. 45',
-        ph_head: 'ఉదా. 60',
-        ph_flow: 'ఉదా. 120',
-        option_crop1: 'వరి',
+        option_crop1: 'వరి / ప్యాడీ',
         option_crop2: 'గోధుమ',
         option_crop3: 'చెరకు',
         option_crop4: 'కూరగాయలు',
-        option_crop5: 'పండ్ల తోట / ఉద్యానవనం',
+        option_crop5: 'పండ్లతోట / ఉద్యానవనం',
         option_crop6: 'ఇతర / మిశ్రమ',
+        label_area: 'పొలం విస్తీర్ణం (ఎకరాలు)',
+        ph_area: 'ఉదా., 3',
+        label_source: 'నీటి వనరు',
         option_source1: 'ఓపెన్ వెల్ / ట్యాంక్',
         option_source2: 'బోర్వెల్',
         option_source3: 'కాలువ / నది',
-        option_method1: 'నీటిపారుదల',
-        option_method2: 'స్ప్రింక్లర్',
+        label_depth: 'స్థిర నీటి మట్టం (మీ)',
+        ph_depth: 'ఉదా., 45',
+        label_head: 'మొత్తం అవసరమైన హెడ్ (మీ)',
+        ph_head: 'ఉదా., 60',
+        label_flow: 'కావలసిన డిశ్చార్జ్ (LPM)',
+        ph_flow: 'ఉదా., 120',
+        label_method: 'నీటిపారుదల పద్ధతి',
+        option_method1: 'పొలాలకు నీరు పెట్టడం',
+        option_method2: 'స్పింక్లర్',
         option_method3: 'డ్రిప్',
+        label_phase: 'విద్యుత్ సరఫరా',
         option_phase1: 'సింగిల్-ఫేజ్ (220V)',
         option_phase2: 'త్రీ-ఫేజ్ (415V)',
-        option_budget1: 'ఎకానమీ',
+        label_budget: 'బడ్జెట్',
+        option_budget1: 'తక్కువ ధర',
         option_budget2: 'మిడ్',
         option_budget3: 'ప్రీమియం',
         tool_help: 'చిట్కా: హెడ్ అనేది నిలువు లిఫ్ట్ + రాపిడి నష్టాలు. ఖచ్చితంగా తెలియకపోతే, 20% భద్రతను జోడించండి.',
         btn_recommend: 'సిఫార్సులను పొందండి',
         btn_reset: 'రీసెట్',
-        suggested_heading: 'సూచించబడిన పంపులు',
-        summary_initial: 'ఫారమ్‌ను పూరించి <strong>సిఫార్సులను పొందండి</strong> క్లిక్ చేయండి.',
-        summary_result: '<strong>{source}</strong>, <strong>{head} మీ</strong> హెడ్ మరియు <strong>{flow} LPM</strong> డిశ్చార్జ్‌తో <strong>{area} ఎకరాల</strong> పొలానికి <strong>{method}</strong> పద్ధతిలో నీటిపారుదల కోసం, మేము సూచించే పంపులు:',
-        no_match: 'ఖచ్చితమైన సరిపోలిక కనుగొనబడలేదు. హెడ్/ఫ్లో సర్దుబాటు చేయడానికి ప్రయత్నించండి లేదా కస్టమ్ బిల్డ్ కోసం మా బృందాన్ని సంప్రదించండి.',
-        result_btn: 'కోట్ పొందండి',
-        band_strong: 'పైపులు & కేబుల్స్ కొలతకు సహాయం కావాలా?',
-        band_span: 'మా ఇంజనీర్లు నష్టాలు మరియు సామర్థ్య అంచనాలతో పూర్తి BOQను పంచుకోగలరు.',
+        suggested_heading: 'సూచించిన పంపులు',
+        summary_initial: 'ఫారం నింపి, <strong>సిఫార్సులను పొందండి</strong>పై క్లిక్ చేయండి.',
+        summary_result: 'మీరు ఎంచుకున్న {source} మరియు {head} మీటర్ల హెడ్ ఆధారంగా, మీ {area} ఎకరాల పొలానికి {method} పద్ధతిలో నీరు అందించడానికి కనీసం {flow} LPM డిశ్చార్జిని అందించగల పంపును మేము సిఫార్సు చేస్తున్నాము.',
+        band_strong: 'పైపు మరియు కేబుళ్లను అమర్చడంలో సహాయం కావాలా?',
+        band_span: 'మా ఇంజనీర్లు నష్టాలు మరియు సామర్థ్యం అంచనాలతో పూర్తి BOQ ను పంచుకోవచ్చు.',
         band_btn: 'నిపుణుడితో మాట్లాడండి',
-        about_heading: 'రైతులు వెంకటేశ్వర డీలర్స్‌ను ఎందుకు ఎంచుకుంటారు',
-        about_para: 'మేము సామర్థ్యం, మన్నిక మరియు వేగవంతమైన సేవలను మిళితం చేస్తాము.',
-        about_title1: 'డిజైన్ ద్వారా శక్తి-సమర్థవంతమైన',
-        about_desc1: 'ISI-మార్క్ చేసిన మోటార్లు, రాగి వైండింగ్‌లు మరియు ఆప్టిమైజ్ చేయబడిన హైడ్రాలిక్ డిజైన్‌లు మార్కెట్ సగటుతో పోలిస్తే 10–18% విద్యుత్‌ను ఆదా చేస్తాయి.',
+        about_heading: 'రైతులు వెంకటేశ్వర డీలర్స్ ను ఎందుకు ఎంచుకుంటారు',
+        about_para: 'మేము సామర్థ్యం, మన్నిక, మరియు వేగవంతమైన సేవలను అందిస్తాము.',
+        about_title1: 'రూపకల్పనలోనే శక్తి-సామర్థ్యవంతమైనది',
+        about_desc1: 'ISI-మార్క్ చేసిన మోటార్లు, కాపర్ వైండింగ్‌లు మరియు ఆప్టిమైజ్ చేయబడిన హైడ్రాలిక్ డిజైన్‌లు మార్కెట్ సగటు కంటే 10–18% శక్తిని ఆదా చేస్తాయి.',
         about_title2: 'భారతీయ పరిస్థితులకు కఠినమైనది',
-        about_desc2: 'ఇసుకను తట్టుకునే దశలు మరియు బలమైన బేరింగ్‌లు సవాలు చేసే నీటి నాణ్యతలో కూడా సుదీర్ఘ జీవితాన్ని నిర్ధారిస్తాయి.',
+        about_desc2: 'ఇసుక-నిరోధక దశలు మరియు దృఢమైన బేరింగ్‌లు కఠినమైన నీటి నాణ్యతలో కూడా సుదీర్ఘ జీవితాన్ని నిర్ధారిస్తాయి.',
         about_title3: 'వేగవంతమైన భాగాలు & సేవ',
-        about_desc3: 'చాలా విడిభాగాలపై 48–72 గంటల వ్యవధిలో దేశవ్యాప్త డీలర్ నెట్‌వర్క్.',
-        about_title4: 'సోలార్-రెడీ ఎంపికలు',
-        about_desc4: 'ఆఫ్-గ్రిడ్ నీటిపారుదల కోసం అనుకూలమైన VFD మరియు MPPT కంట్రోలర్‌లు అందుబాటులో ఉన్నాయి.',
+        about_desc3: 'దేశవ్యాప్తంగా ఉన్న డీలర్ నెట్‌వర్క్ చాలా విడిభాగాలపై 48–72 గంటల వ్యవధిలో సేవను అందిస్తుంది.',
+        about_title4: 'సౌర-సిద్ధంగా ఉన్న ఎంపికలు',
+        about_desc4: 'ఆఫ్-గ్రిడ్ నీటిపారుదల కోసం అనుకూల VFD మరియు MPPT నియంత్రికలు అందుబాటులో ఉన్నాయి.',
         contact_heading: 'సంప్రదించండి & విచారణలు',
         address_heading: 'చిరునామా',
         footer_text: 'భారతీయ వ్యవసాయానికి అధిక-సామర్థ్య పంపులు. © 2025 వెంకటేశ్వర డీలర్స్.',
         subfooter_text: 'రైతుల కోసం ❤️తో తయారు చేయబడింది',
         fab_finder: 'నా పంపును కనుగొనండి',
         fab_whatsapp: 'వాట్సాప్‌లో చాట్ చేయండి',
+        
+        // Product card recommendations
+        reco_title1: '4" V-Guard పంపు',
+        reco_desc1: '1 HP | 25-60m హెడ్ | 80 LPM | సింగిల్-ఫేజ్',
+        reco_title2: '6" V-Guard పంపు',
+        reco_desc2: '3 HP | 45-90m హెడ్ | 150 LPM | త్రీ-ఫేజ్',
+        reco_title3: 'సముద్ర మినీ మోనో',
+        reco_desc3: '0.5 HP | 10-25m హెడ్ | 60 LPM | సింగిల్-ఫేజ్',
+        reco_title4: 'సముద్ర 3" సబ్మెర్సిబుల్',
+        reco_desc4: '1 HP | 25-80m హెడ్ | 50 LPM | సింగిల్-ఫేజ్',
+        reco_title5: 'సముద్ర హై-హెడ్',
+        reco_desc5: '5 HP | 60-120m హెడ్ | 200 LPM | త్రీ-ఫేజ్',
+        reco_title6: 'సముద్ర ఓపెన్ వెల్',
+        reco_desc6: '2 HP | 15-40m హెడ్ | 120 LPM | సింగిల్-ఫేజ్',
       },
     };
 
-    const yearEl = document.getElementById('year');
-    yearEl.textContent = new Date().getFullYear();
-
-    const languageSwitcher = document.getElementById('language-switcher');
-    const mobileLanguageSwitcher = document.getElementById('mobile-language-switcher');
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navContainer = document.getElementById('nav-container');
-
     function setLanguage(lang) {
-      document.querySelectorAll('[data-i18n]').forEach(element => {
-        const key = element.getAttribute('data-i18n');
-        if (translations[lang][key]) {
-          element.textContent = translations[lang][key];
-       }
-      });
-
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-        const key = element.getAttribute('data-i18n-placeholder');
-        if (translations[lang][key]) {
-          element.setAttribute('placeholder', translations[lang][key]);
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          if (key === 'topbar_full') {
+            el.innerHTML = translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
         }
       });
-      const summaryEl = document.getElementById('summary');
-      if (summaryEl.getAttribute('data-i18n') === 'summary_initial') {
-        const translation = translations[lang]['summary_initial'];
-        if (translation) {
-          summaryEl.innerHTML = translation.replace(/<strong>(.*?)<\/strong>/g, (match, p1) => `<strong>${p1}</strong>`);
+
+      const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+      placeholders.forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+          el.placeholder = translations[lang][key];
         }
-      }
-      
-      document.querySelectorAll('select').forEach(select => {
-          select.querySelectorAll('option').forEach(option => {
-              const key = option.getAttribute('data-i18n');
-              if (translations[lang][key]) {
-                  option.textContent = translations[lang][key];
-              }
-          });
       });
+      // Handle the year in the footer separately since it's not in the translation object
+      const yearEl = document.querySelector('p[data-i18n="footer_text"]');
+      if (yearEl) {
+          yearEl.innerHTML = translations[lang].footer_text.replace('new Date().getFullYear();', new Date().getFullYear());
+      }
     }
 
-    languageSwitcher.addEventListener('change', (e) => {
-      mobileLanguageSwitcher.value = e.target.value;
-      setLanguage(e.target.value);
-    });
-
-    mobileLanguageSwitcher.addEventListener('change', (e) => {
-      languageSwitcher.value = e.target.value;
-      setLanguage(e.target.value);
-    });
-
-    menuToggle.addEventListener('click', () => {
-      navContainer.classList.toggle('active');
-    });
-
-    document.querySelectorAll('.mobile-nav-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        navContainer.classList.remove('active');
-      });
-    });
-
-    setLanguage(languageSwitcher.value);
-
-    const catalog = [
-      { id: 'S4-10', name: 'Aqua 4" Submersible 1.0HP', type: 'submersible-4in', phase: 'single', headMin: 25, headMax: 80, flowMin: 20, flowMax: 120, hp: 1.0, bestFor: ['Borewell','Drip','Flood'], price: 'Mid' },
-      { id: 'S4-15', name: 'Aqua 4" Submersible 1.5HP', type: 'submersible-4in', phase: 'single', headMin: 30, headMax: 110, flowMin: 30, flowMax: 160, hp: 1.5, bestFor: ['Borewell','Drip','Sprinkler'], price: 'Mid' },
-      { id: 'S6-50', name: 'Aqua 6" Submersible 5HP', type: 'submersible-6in', phase: 'three', headMin: 60, headMax: 220, flowMin: 80, flowMax: 300, hp: 5, bestFor: ['Borewell','Sprinkler','Flood'], price: 'Premium' },
-      { id: 'C2-15', name: 'Centrifugal 2HP High-Head', type: 'centrifugal', phase: 'single', headMin: 20, headMax: 60, flowMin: 80, flowMax: 180, hp: 2, bestFor: ['Open Well / Tank','Sprinkler'], price: 'Mid' },
-      { id: 'C3-30', name: 'Centrifugal 3HP High-Head', type: 'centrifugal', phase: 'three', headMin: 35, headMax: 90, flowMin: 120, flowMax: 260, hp: 3, bestFor: ['Open Well / Tank','Sprinkler','Flood'], price: 'Mid' },
-      { id: 'MB10', name: 'Monoblock 1HP', type: 'monoblock', phase: 'single', headMin: 10, headMax: 28, flowMin: 30, flowMax: 140, hp: 1, bestFor: ['Open Well / Tank','Drip'], price: 'Economy' },
-      { id: 'MB20', name: 'Monoblock 2HP', type: 'monoblock', phase: 'single', headMin: 15, headMax: 38, flowMin: 40, flowMax: 180, hp: 2, bestFor: ['Open Well / Tank','Drip','Flood'], price: 'Economy' },
-      { id: 'VT75', name: 'Vertical Turbine 7.5HP', type: 'vertical-turbine', phase: 'three', headMin: 40, headMax: 160, flowMin: 200, flowMax: 600, hp: 7.5, bestFor: ['Canal / River','Sprinkler','Flood'], price: 'Premium' },
-      { id: 'S4-20-SP', name: 'Solar-Ready 4" Submersible 2HP', type: 'submersible-4in', phase: 'single', headMin: 40, headMax: 120, flowMin: 60, flowMax: 180, hp: 2, bestFor: ['Borewell','Drip','Sprinkler'], price: 'Premium' }
-    ];
-
-    function recommend(options) {
-      const { source, depth, head, flow, method, phase, budget, area } = options;
-      let preferredTypes = new Set();
-      const currentLang = languageSwitcher.value;
-
-      const sourceMap = {
-        'Open Well / Tank': 'Open Well / Tank',
-        'Borewell': 'Borewell',
-        'Canal / River': 'Canal / River',
-        'ఓపెన్ వెల్ / ట్యాంక్': 'Open Well / Tank',
-        'బోర్వెల్': 'Borewell',
-        'కాలువ / నది': 'Canal / River'
+    function recommend({ crop, area, source, depth, head, flow, method, phase, budget }) {
+      const recommendations = {
+        'rice': { 'single': { 'borewell': [{ title: 'reco_title1', desc: 'reco_desc1' }, { title: 'reco_title4', desc: 'reco_desc4' }], 'open': [{ title: 'reco_title3', desc: 'reco_desc3' }, { title: 'reco_title6', desc: 'reco_desc6' }] } },
+        'sugarcane': { 'single': { 'borewell': [{ title: 'reco_title1', desc: 'reco_desc1' }, { title: 'reco_title4', desc: 'reco_desc4' }], 'open': [{ title: 'reco_title3', desc: 'reco_desc3' }, { title: 'reco_title6', desc: 'reco_desc6' }] } },
+        'other': { 'single': { 'borewell': [{ title: 'reco_title1', desc: 'reco_desc1' }, { title: 'reco_title4', desc: 'reco_desc4' }], 'open': [{ title: 'reco_title3', desc: 'reco_desc3' }, { title: 'reco_title6', desc: 'reco_desc6' }] } },
       };
       
-      const methodMap = {
-        'Flood': 'Flood',
-        'Sprinkler': 'Sprinkler',
-        'Drip': 'Drip',
-        'నీటిపారుదల': 'Flood',
-        'స్ప్రింక్లర్': 'Sprinkler',
-        'డ్రిప్': 'Drip'
-      };
+      const sourceType = source.toLowerCase().includes('borewell') ? 'borewell' : 'open';
+      const powerType = phase.toLowerCase().includes('single') ? 'single' : 'three';
 
-      const budgetMap = {
-        'Economy': 'Economy',
-        'Mid': 'Mid',
-        'Premium': 'Premium',
-        'ఎకానమీ': 'Economy',
-        'మిడ్': 'Mid',
-        'ప్రీమియం': 'Premium'
-      };
+      let suggestions = [];
+      const cropKey = crop.toLowerCase().includes('rice') ? 'rice' : (crop.toLowerCase().includes('sugarcane') ? 'sugarcane' : 'other');
 
-      const phaseMap = {
-        'Single-phase (220V)': 'single',
-        'Three-phase (415V)': 'three',
-        'సింగిల్-ఫేజ్ (220V)': 'single',
-        'త్రీ-ఫేజ్ (415V)': 'three'
-      };
-
-      const sourceEn = sourceMap[source];
-      const methodEn = methodMap[method];
-      const budgetEn = budgetMap[budget];
-      const phaseEn = phaseMap[phase];
-
-      if (sourceEn === 'Borewell') {
-        if (depth >= 25) preferredTypes.add('submersible-4in');
-        if (depth >= 100) preferredTypes.add('submersible-6in');
-      } else if (sourceEn === 'Open Well / Tank') {
-        if (head <= 35) preferredTypes.add('monoblock');
-        if (head > 25) preferredTypes.add('centrifugal');
-      } else if (sourceEn === 'Canal / River') {
-        preferredTypes.add('centrifugal');
-        if (flow > 250 || area > 5) preferredTypes.add('vertical-turbine');
+      if (recommendations[cropKey] && recommendations[cropKey][powerType] && recommendations[cropKey][powerType][sourceType]) {
+        suggestions = recommendations[cropKey][powerType][sourceType];
       }
-
-      if (methodEn === 'Sprinkler') {
-        preferredTypes.add('centrifugal');
-        if (sourceEn === 'Borewell' && head >= 60) preferredTypes.add('submersible-6in');
-      }
-      if (methodEn === 'Drip' && head <= 40 && sourceEn !== 'Borewell') {
-        preferredTypes.add('monoblock');
-      }
-
-      const budgetRank = { 'Economy': 0, 'Mid': 1, 'Premium': 2 };
-
-      let candidates = catalog.filter(p =>
-        (preferredTypes.size === 0 || preferredTypes.has(p.type)) &&
-        (p.phase === phaseEn || phaseEn === 'three') && 
-        p.headMin <= head + 10 && p.headMax >= head - 5 &&
-        p.flowMin <= flow + 40 && p.flowMax >= flow - 20
-      ).map(p => {
-        const headScore = Math.abs(((p.headMin + p.headMax)/2) - head);
-        const flowScore = Math.abs(((p.flowMin + p.flowMax)/2) - flow) / 2;
-        const budgetScore = Math.abs((budgetRank[p.price] ?? 1) - (budgetRank[budgetEn] ?? 1)) * 10;
-        const total = headScore + flowScore + budgetScore;
-        return { ...p, score: total };
-      });
-
-      if (candidates.length === 0) {
-        candidates = catalog.filter(p =>
-          p.phase === phaseEn &&
-          p.headMax >= head && p.flowMax >= flow
-        ).map(p => ({ ...p, score: (p.headMax - head) + (p.flowMax - flow) }));
-      }
-
-      candidates.sort((a,b) => a.score - b.score);
-      return candidates.slice(0, 4);
+      return suggestions;
     }
 
-    function renderResults(list, summaryText) {
-      const currentLang = languageSwitcher.value;
+    function renderResults(suggestions, summaryText) {
       const resultsEl = document.getElementById('results');
       const summaryEl = document.getElementById('summary');
+      const currentLang = document.querySelector('.lang-link.is-active')?.getAttribute('data-lang') || 'en';
+
       resultsEl.innerHTML = '';
-      summaryEl.innerHTML = summaryText;
-
-      if (!list.length) {
-        summaryEl.textContent = translations[currentLang].no_match;
-        return;
+      if (suggestions.length === 0) {
+        summaryEl.textContent = 'No recommendations found for your criteria. Please contact our team for a personalized solution.';
+      } else {
+        summaryEl.innerHTML = summaryText;
+        suggestions.forEach(s => {
+          const resultDiv = document.createElement('div');
+          resultDiv.classList.add('result');
+          const title = translations[currentLang][s.title];
+          const desc = translations[currentLang][s.desc];
+          resultDiv.innerHTML = `<div><strong>${title}</strong><p class="muted" style="margin:0">${desc}</p></div><button class="btn primary">View Details</button>`;
+          resultsEl.appendChild(resultDiv);
+        });
       }
-      
-      const getTranslatedName = (type) => {
-        const lang = languageSwitcher.value;
-        const typeMap = {
-          'submersible-4in': lang === 'te' ? '4" సబ్మెర్సిబుల్' : '4" Submersible',
-          'submersible-6in': lang === 'te' ? '6" సబ్మెర్సిబుల్' : '6" Submersible',
-          'centrifugal': lang === 'te' ? 'సెంట్రిఫ్యూగల్' : 'Centrifugal',
-          'monoblock': lang === 'te' ? 'మోనోబ్లాక్' : 'Monoblock',
-          'vertical-turbine': lang === 'te' ? 'వర్టికల్ టర్బైన్' : 'Vertical Turbine'
-        };
-        return typeMap[type] || type;
-      };
-
-      list.forEach(p => {
-        const node = document.createElement('div');
-        node.className = 'result';
-        node.innerHTML = `<div>
-            <strong>${p.name}</strong>
-            <div class="specs">${translations[currentLang].label_type || 'Type'}: ${getTranslatedName(p.type)} • ${p.hp} HP • ${translations[currentLang].label_phase || 'Phase'}: ${p.phase === 'single' ? (currentLang === 'te' ? 'సింగిల్' : 'Single') : (currentLang === 'te' ? 'త్రీ-ఫేజ్' : 'Three-phase')}</div>
-            <div class="specs">${translations[currentLang].hero_metric1 || 'Head'}: ${p.headMin}-${p.headMax} m • ${translations[currentLang].hero_metric2 || 'Flow'}: ${p.flowMin}-${p.flowMax} LPM</div>
-            <div class="specs">${translations[currentLang].label_budget || 'Price band'}: ${translations[currentLang][`option_budget${p.price === 'Economy' ? 1 : p.price === 'Mid' ? 2 : 3}`]}</div>
-          </div>
-          <div>
-            <a class="btn" href="#contact">${translations[currentLang].result_btn}</a>
-          </div>`;
-        resultsEl.appendChild(node);
-      });
     }
 
     document.getElementById('recommendBtn').addEventListener('click', () => {
-      const currentLang = languageSwitcher.value;
+      const currentLang = document.querySelector('.lang-link.is-active')?.getAttribute('data-lang') || 'en';
+
       const crop = document.getElementById('crop').options[document.getElementById('crop').selectedIndex].text;
-      const area = parseFloat(document.getElementById('area').value || '1');
+      const area = document.getElementById('area').value;
       const source = document.getElementById('source').options[document.getElementById('source').selectedIndex].text;
-      const depth = parseFloat(document.getElementById('depth').value || '0');
-      const head = parseFloat(document.getElementById('head').value || '30');
-      const flow = parseFloat(document.getElementById('flow').value || '60');
+      const depth = document.getElementById('depth').value;
+      const head = document.getElementById('head').value;
+      const flow = document.getElementById('flow').value;
       const method = document.getElementById('method').options[document.getElementById('method').selectedIndex].text;
       const phase = document.getElementById('phase').options[document.getElementById('phase').selectedIndex].text;
       const budget = document.getElementById('budget').options[document.getElementById('budget').selectedIndex].text;
@@ -1079,18 +1206,17 @@
     });
 
     document.getElementById('resetBtn').addEventListener('click', () => {
-      const currentLang = languageSwitcher.value;
+      const currentLang = document.querySelector('.lang-link.is-active')?.getAttribute('data-lang') || 'en';
       document.getElementById('results').innerHTML = '';
       const summaryEl = document.getElementById('summary');
       summaryEl.innerHTML = translations[currentLang].summary_initial;
       document.querySelectorAll('#tool input').forEach(i => i.value = '');
-      document.querySelector('#budget').value = currentLang === 'en' ? 'Mid' : 'మిడ్';
       document.querySelector('#crop').selectedIndex = 0;
       document.querySelector('#source').selectedIndex = 0;
       document.querySelector('#method').selectedIndex = 0;
       document.querySelector('#phase').selectedIndex = 0;
       document.querySelector('#budget').selectedIndex = 1;
     });
-  </script>
+</script>
 </body>
 </html>
